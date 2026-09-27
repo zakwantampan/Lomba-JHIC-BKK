@@ -1,0 +1,1668 @@
+/* Visual alignment with PrototypeBKK.png (1280px desktop reference). */
+:root {
+  --primary:#ff8c00;
+  --accent-yellow:#ffc400;
+  --text-main:#111;
+  --text-muted:#62666c;
+  --bg-page:#fff;
+  --font-heading:'Plus Jakarta Sans',Arial,sans-serif
+}
+
+.container {
+  max-width:1280px;
+  padding-inline:40px
+}
+
+section[id] {
+  scroll-margin-top:80px
+}
+
+:focus-visible {
+  outline:3px solid #147d98;
+  outline-offset:4px
+}
+
+.navbar-container {
+  height:80px
+}
+
+.navbar-sticky {
+  box-shadow:none
+}
+
+.brand-logo-img {
+  width:76px;
+  height:48px
+}
+
+.brand-name {
+  font-size:24px;
+  font-weight:700
+}
+
+.brand-tagline {
+  font-size:10px;
+  letter-spacing:0
+}
+
+.nav-menu-desktop {
+  gap:16px
+}
+
+.nav-link-item {
+  font-size:16px;
+  font-weight:500;
+  padding:8px 0;
+  color:#222
+}
+
+.nav-link-item.active::after {
+  left:0;
+  right:0;
+  height:2px
+}
+
+.btn-login-orange {
+  background:#ff8c00;
+  border-radius:18px;
+  font-weight:600
+}
+
+.hero-bkk {
+  min-height:0;
+  height:800px;
+  padding-bottom:54px
+}
+
+.hero-container-flex {
+  padding-top:120px;
+  padding-right:28px
+}
+
+.hero-text-card {
+  max-width:640px
+}
+
+.hero-heading-white,.hero-heading-orange {
+  font-size:56px;
+  font-weight:700;
+  line-height:1.25;
+  letter-spacing:-2px
+}
+
+.hero-heading-orange {
+  color:#ff8c00
+}
+
+.hero-title-group {
+  margin-bottom:16px
+}
+
+.hero-desc-bkk {
+  font-size:16px;
+  line-height:1.3;
+  max-width:510px;
+  margin-left:auto;
+  margin-bottom:32px
+}
+
+.hero-bg-image {
+  object-position:center
+}
+
+.hero-overlay-gradient {
+  background:linear-gradient(90deg,transparent 25%,#0002 48%,#0009 100%)
+}
+
+.hero-stats-panel-wrapper {
+  padding-inline:78px
+}
+
+.hero-stats-panel-glass {
+  border-radius:20px;
+  padding:34px 26px;
+  background:#fff4;
+  backdrop-filter:blur(8px)
+}
+
+.stat-num-value {
+  font-size:48px;
+  font-weight:600;
+  text-shadow:none
+}
+
+.stat-desc-label {
+  font-size:14px;
+  font-weight:600;
+  text-shadow:none
+}
+
+.hero-btn-row {
+  gap:24px
+}
+
+.btn-hero-dark-trans,.btn-hero-orange-pill {
+  font-size:12px;
+  padding:10px 24px
+}
+
+.section-lowongan-bg,.section-career-center-wrap,.section-alumni-wrap,.section-agenda-exact,.section-insight-exact-wrap,.section-laporan-exact {
+  background:#efefef
+}
+
+.section-lowongan-bg {
+  padding:142px 0 44px
+}
+
+.title-orange-center {
+  font-size:32px;
+  font-weight:700;
+  color:#ff8c00;
+  margin-bottom:48px
+}
+
+.lowongan-layout-split {
+  grid-template-columns:294px minmax(0,1fr);
+  gap:24px
+}
+
+.card-filter-softblue {
+  background:#f0f2ff;
+  border:0;
+  border-radius:16px;
+  padding:26px 24px;
+  box-shadow:0 1px 2px #0001
+}
+
+.filter-field-block {
+  margin-bottom:14px
+}
+
+.filter-field-block:last-child {
+  margin-bottom:0
+}
+
+.filter-field-label {
+  font-size:14px;
+  font-weight:500
+}
+
+.filter-input-styled,.filter-select-styled {
+  border-radius:3px;
+  background:#f9f9ff;
+  font-size:16px;
+  padding:10px 8px
+}
+
+.filter-checkbox-list {
+  gap:10px
+}
+
+.filter-checkbox-row {
+  font-size:16px
+}
+
+.filter-heading-navy {
+  font-size:18px;
+  font-weight:700
+}
+
+.jobs-grid-2col {
+  gap:24px
+}
+
+.job-card-white {
+  padding:24px;
+  border-radius:16px;
+  border-color:#cfd2da;
+  box-shadow:0 2px 3px #0001
+}
+
+.job-role-text {
+  font-size:18px;
+  font-weight:700;
+  color:#183958
+}
+
+.job-comp-text {
+  font-size:14px;
+  font-weight:600
+}
+
+.job-info-list {
+  font-size:14px;
+  gap:8px
+}
+
+.btn-detail-navy-outline {
+  border-radius:2px;
+  font-size:16px;
+  font-weight:500;
+  padding:8px
+}
+
+.btn-see-all-jobs-orange {
+  margin-top:48px;
+  border-radius:16px;
+  font-weight:600;
+  padding:14px 32px
+}
+
+.lowongan-deco-topleft {
+  top:32px;
+  left:62px;
+  width:144px;
+  height:130px
+}
+
+.lowongan-circle-1 {
+  width:108px;
+  height:108px;
+  top:26px;
+  background:#ff8c00;
+  z-index:1
+}
+
+.lowongan-circle-2 {
+  width:108px;
+  height:108px;
+  left:36px;
+  top:0;
+  background:#ffc400
+}
+
+.lowongan-deco-bottomright {
+  bottom:20px;
+  right:40px
+}
+
+.lowongan-deco-bottomright img {
+  width:100px;
+  height:115px;
+  object-fit:contain
+}
+
+.jobs-empty {
+  grid-column:1/-1;
+  padding:24px;
+  background:#fff;
+  border-radius:12px
+}
+
+.section-jalur-wrap {
+  padding:66px 0 64px
+}
+
+.section-jalur-wrap h2,.section-career-center-wrap h2,.section-tracer-wrap h2 {
+  font-size:32px!important;
+  font-weight:700!important
+}
+
+.section-jalur-wrap h2,.section-tracer-wrap h2 {
+  color:#ff8c00!important
+}
+
+.section-jalur-wrap .container>div>p,.section-career-center-wrap .container>div>p {
+  font-size:18px!important;
+  max-width:620px!important;
+  color:#62666c!important
+}
+
+.section-jalur-wrap .container>div:first-child,.section-career-center-wrap .container>div:first-child {
+  margin-bottom:48px!important
+}
+
+.paths-4col-grid {
+  gap:24px
+}
+
+.path-card-white {
+  padding:32px;
+  min-height:258px;
+  border-color:#cfd2da;
+  box-shadow:0 2px 3px #0001
+}
+
+.path-icon-orange-square,.cc-card-icon-box {
+  width:48px;
+  height:48px;
+  border-radius:7px;
+  margin-bottom:26px
+}
+
+.path-icon-img {
+  width:30px;
+  height:30px;
+  object-fit:contain
+}
+
+.path-heading-title,.cc-card-title {
+  font-size:24px;
+  font-weight:600;
+  color:#111
+}
+
+.path-body-desc,.cc-card-desc {
+  font-size:16px;
+  color:#62666c;
+  line-height:1.6
+}
+
+.jalur-deco-corner {
+  bottom:20px;
+  right:12px
+}
+
+.jalur-deco-corner img {
+  width:90px
+}
+
+.section-career-center-wrap {
+  padding:66px 0 64px
+}
+
+.career-center-grid-6 {
+  gap:24px
+}
+
+.cc-card-item {
+  padding:32px;
+  min-height:228px;
+  border-color:#cfd2da;
+  box-shadow:0 2px 3px #0001
+}
+
+.cc-card-icon-img {
+  width:30px;
+  height:30px
+}
+
+.cc-briefcase-deco-img {
+  width:140px;
+  filter:drop-shadow(3px 4px 2px #0003)
+}
+
+.cc-briefcase-deco {
+  right:26px;
+  top:46px
+}
+
+.cc-sparkles-deco {
+  bottom:16px;
+  left:28px
+}
+
+.section-mitra-exact-img1 {
+  padding:28px 0 62px
+}
+
+.mitra-title-styled {
+  font-size:48px;
+  letter-spacing:-2px
+}
+
+.mitra-title-styled::after {
+  width:100%;
+  height:1px
+}
+
+.mitra-title-header-centered {
+  margin-bottom:30px
+}
+
+.mitra-marquee-wrapper {
+  margin:0 0 24px;
+  padding:20px 0;
+  mask-image:none;
+  background:#fdfdfd
+}
+
+.mitra-marquee-track {
+  width:100%;
+  gap:20px;
+  animation:none;
+  justify-content:space-between
+}
+
+.mitra-marquee-item {
+  min-width:0;
+  width:20%;
+  padding:8px;
+  height:100px
+}
+
+.mitra-marquee-item:nth-child(n+6) {
+  display:none
+}
+
+.mitra-marquee-item img {
+  max-width:100%!important;
+  max-height:60px!important
+}
+
+.mitra-subtext-connected {
+  font-size:18px;
+  color:#222
+}
+
+.mitra-link-gold {
+  color:#ffbf00;
+  font-size:18px;
+  text-decoration:underline
+}
+
+.mitra-ornament-circles-img {
+  width:102px
+}
+
+.mitra-deco-topleft-circles {
+  left:40px;
+  top:32px
+}
+
+.mitra-ornament-factory-img {
+  width:128px
+}
+
+#alumni {
+  background:#efefef;
+  padding:66px 0 64px
+}
+
+.alumni-heading-orange {
+  font-size:48px;
+  font-weight:700;
+  letter-spacing:-1.5px;
+  color:#ff6600;
+  margin-bottom:36px
+}
+
+.alumni-subtitle-dark {
+  font-size:20px;
+  color:#222
+}
+
+.split-success-journey {
+  grid-template-columns:2fr 1fr;
+  gap:120px;
+  padding:28px 32px 0
+}
+
+.testimonial-card-slide14 {
+  padding:40px 32px 20px;
+  border-radius:16px;
+  border-color:#aaa;
+  box-shadow:none
+}
+
+.testi-avatar-icon {
+  width:104px;
+  height:104px;
+  background:#ffc400;
+  border:1px solid #222;
+  color:#000
+}
+
+.testi-author-name {
+  font-size:20px
+}
+
+.testi-author-batch,.testi-author-role {
+  font-size:12px
+}
+
+.testi-verified-seal-img {
+  width:88px;
+  height:88px
+}
+
+.testi-quote-p {
+  font-size:18px;
+  margin-bottom:24px
+}
+
+.testi-circle-arrow-btn {
+  width:50px;
+  height:50px;
+  font-size:28px;
+  font-weight:400
+}
+
+.stepper-journey-title {
+  font-size:32px;
+  margin-bottom:24px
+}
+
+.journey-vertical-timeline {
+  gap:34px
+}
+
+.journey-step-text-title {
+  font-size:16px;
+  font-weight:500
+}
+
+.journey-step-text-sub {
+  font-size:12px
+}
+
+.journey-node-dot {
+  width:10px;
+  height:10px;
+  box-shadow:none;
+  border:2px solid white
+}
+
+.journey-timeline-line {
+  left:4px;
+  background:#183958
+}
+
+.alumni-circle-outer {
+  border:0;
+  background:transparent;
+  width:136px;
+  height:136px
+}
+
+.alumni-badge-top-icon {
+  width:136px;
+  height:136px
+}
+
+.section-tracer-wrap {
+  background:#fff;
+  position:relative;
+  padding:66px 0 64px
+}
+
+.section-tracer-wrap::before,.section-tracer-wrap::after {
+  content:'';
+  position:absolute;
+  width:100px;
+  height:100px;
+  background: url('/img/Group 89.png') center/contain no-repeat;
+  pointer-events:none;
+  top:42px;
+  left:32px
+}
+
+.section-tracer-wrap::after {
+  background-image:url('/img/Group 148.png');
+  left:auto;
+  right:32px;
+  top:132px
+}
+
+.tracer-2col-layout {
+  grid-template-columns:1fr 1fr;
+  gap:24px
+}
+
+.tracer-bars-card {
+  border-radius:6px;
+  padding:32px;
+  border-color:#cfd2da
+}
+
+.tracer-bar-item {
+  margin-bottom:34px
+}
+
+.tracer-bar-labels {
+  font-size:16px;
+  color:#183958
+}
+
+.tracer-bar-track {
+  height:16px;
+  background:#dfe7fc
+}
+
+.tracer-total-number {
+  font-size:48px;
+  font-weight:500;
+  color:#183958
+}
+
+.tracer-cta-box-orange {
+  background:#ff8c00;
+  padding:32px;
+  border-radius:6px
+}
+
+.tracer-cta-title-text {
+  font-size:24px;
+  font-weight:600;
+  line-height:1.4;
+  margin-bottom:16px
+}
+
+.btn-tracer-action-white {
+  background:#ff6600;
+  color:#fff;
+  border-radius:3px;
+  box-shadow:none;
+  padding:16px 32px
+}
+
+.tracer-note {
+  font-size:12px;
+  font-style:italic;
+  line-height:1.5;
+  color:#62666c;
+  margin-top:22px
+}
+
+.section-agenda-exact {
+  padding:66px 0 82px
+}
+
+.agenda-title-exact {
+  font-size:32px;
+  font-weight:700;
+  color:#ff8c00;
+  margin-bottom:18px
+}
+
+.agenda-subtitle-exact {
+  font-size:18px
+}
+
+.agenda-grid-2col-exact {
+  grid-template-columns:1fr 2.06fr;
+  gap:24px
+}
+
+.agenda-card-featured-orange {
+  background:#ff8c00;
+  padding:32px;
+  border-radius:7px
+}
+
+.agenda-badge-date-pill {
+  font-size:16px;
+  font-weight:500;
+  letter-spacing:0;
+  padding:5px 12px;
+  border-radius:2px;
+  margin-bottom:24px
+}
+
+.agenda-featured-title-white {
+  font-size:32px;
+  font-weight:600;
+  margin-bottom:20px
+}
+
+.agenda-featured-desc-white {
+  font-size:18px;
+  line-height:1.6;
+  margin-bottom:32px
+}
+
+.agenda-btn-featured-white {
+  width:100%;
+  justify-content:center;
+  border-radius:3px;
+  font-size:16px
+}
+
+.agenda-grid-right-cards {
+  gap:16px
+}
+
+.agenda-mini-card-white {
+  border-radius:6px;
+  padding:16px;
+  border-color:#cfd2da;
+  gap:16px
+}
+
+.agenda-mini-icon-orange {
+  border-radius:3px;
+  width:48px;
+  height:48px;
+  background:#ff6600
+}
+
+.agenda-mini-card-title {
+  font-size:16px;
+  color:#183958
+}
+
+.agenda-mini-card-meta {
+  font-size:12px
+}
+
+.agenda-deco-cal-img {
+  width:128px;
+  height:128px;
+  filter:drop-shadow(3px 4px 2px #0003)
+}
+
+.agenda-deco-topright-cal {
+  top:0;
+  right:32px
+}
+
+.agenda-deco-topleft-halfcircle {
+  top:42px;
+  width:80px;
+  height:160px;
+  background:#ff8c00;
+  border-right:12px solid #ffc400
+}
+
+.section-insight-exact-wrap {
+  padding:70px 0 40px
+}
+
+.insight-main-title {
+  font-size:48px;
+  font-weight:700;
+  letter-spacing:-1.5px
+}
+
+.insight-main-subtitle {
+  font-size:18px;
+  max-width:720px;
+  font-weight:600;
+  color:#52565a
+}
+
+.insight-5cards-grid {
+  gap:44px 26px
+}
+
+.insight-photo-box {
+  height:auto;
+  aspect-ratio:1.86
+}
+
+.insight-card-body-exact {
+  padding:24px 28px 18px
+}
+
+.insight-h3-title {
+  font-size:18px;
+  font-weight:600;
+  line-height:1.55
+}
+
+.insight-p-desc {
+  font-size:16px;
+  line-height:1.65
+}
+
+.insight-link-yellow {
+  font-size:18px;
+  color:#ffbf00;
+  text-decoration:underline;
+  font-weight:500;
+  text-align:left
+}
+
+.insight-card-exact {
+  box-shadow:4px 8px 10px #0003
+}
+
+.insight-category-pill {
+  font-weight:500;
+  border-radius:3px
+}
+
+.insight-big-arrow-img {
+  max-width:280px;
+  width:100%
+}
+
+.insight-topright-compass-img {
+  width:134px;
+  height:134px;
+  filter:drop-shadow(3px 4px 2px #0003)
+}
+
+.insight-topright-compass {
+  right:78px
+}
+
+.section-insight-exact-wrap .btn-see-all-jobs-orange {
+  background:#ff8c00;
+  margin-top:44px;
+  font-size:16px;
+  padding:7px 14px;
+  border-radius:8px
+}
+
+.section-rekap-exact-wrap {
+  padding:42px 0 54px
+}
+
+.rekap-pill-badge-top {
+  background:#ff8c00;
+  font-size:16px;
+  letter-spacing:0;
+  border-radius:10px;
+  margin-bottom:86px;
+  padding:6px 28px
+}
+
+.rekap-grid-12-exact {
+  gap:68px 36px
+}
+
+.rekap-box-exact {
+  position:relative;
+  border:0;
+  border-radius:0;
+  padding:48px 16px 20px;
+  background:#efefef;
+  animation:none;
+  min-height:144px
+}
+
+.rekap-circle-badge-exact {
+  position:absolute;
+  top:-40px;
+  width:78px;
+  height:78px;
+  border:5px solid #ffc400;
+  background:#ff8c00;
+  margin:0
+}
+
+.rekap-badge-img {
+  width:38px;
+  height:38px
+}
+
+.rekap-num-bold-exact {
+  font-size:38px;
+  font-weight:600;
+  color:#ff6600
+}
+
+.rekap-label-exact,.rekap-sub-exact {
+  font-size:14px;
+  font-weight:400;
+  color:#222;
+  line-height:1.3
+}
+
+.section-laporan-exact {
+  padding:112px 0 124px
+}
+
+.section-laporan-exact>.container {
+  padding-inline:76px
+}
+
+.laporan-card-white-exact {
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  padding:18px 32px 36px;
+  margin-bottom:32px
+}
+
+.donut-title-exact {
+  font-size:20px;
+  font-weight:600;
+  color:#111
+}
+
+.donuts-side-by-side-grid {
+  gap:40px
+}
+
+.donut-callout-wrapper {
+  width:340px;
+  height:310px;
+  margin:0
+}
+
+.donut-svg-stage {
+  width:280px;
+  height:280px;
+  filter:none
+}
+
+.donut-callout-tag {
+  border:0;
+  box-shadow:none;
+  border-radius:0;
+  background:transparent;
+  font-size:14px;
+  line-height:1.1;
+  padding:0
+}
+
+.donut-tag-label,.donut-tag-val {
+  font-size:14px;
+  color:#111!important;
+  font-weight:500
+}
+
+.donut-legend-exact-row {
+  gap:2px;
+  margin-left:0
+}
+
+.donut-col-exact:nth-child(2) .donut-legend-exact-row {
+  align-self:flex-end
+}
+
+.legend-exact-dot {
+  width:36px;
+  height:18px;
+  border-radius:20px;
+  box-shadow:none
+}
+
+.legend-exact-item {
+  font-size:16px;
+  font-weight:500;
+  color:#111
+}
+
+.yearly-chart-title {
+  font-size:20px;
+  font-weight:600;
+  margin-bottom:12px
+}
+
+.years-pill-legend-wrap {
+  gap:4px 8px;
+  justify-content:flex-start;
+  margin-bottom:22px
+}
+
+.year-pill-exact {
+  font-size:14px;
+  font-weight:500;
+  color:#111
+}
+
+.year-pill-rect {
+  width:36px;
+  height:18px;
+  border-radius:20px
+}
+
+.barchart-stage-container {
+  height:430px;
+  margin:0 0 0 80px
+}
+
+.grid-line-stroke {
+  background:#555
+}
+
+.grid-line-val {
+  color:#111;
+  font-size:16px;
+  font-weight:500;
+  left:-55px
+}
+
+.bar-column-group {
+  position:relative;
+  width:25%;
+  height:100%;
+  justify-content:flex-end
+}
+
+.bar-pillar-stacked {
+  width:64%;
+  border-radius:0;
+  box-shadow:none;
+  flex-shrink:0
+}
+
+.bar-cat-label-bottom {
+  position:absolute;
+  top:100%;
+  margin-top:0;
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:0
+}
+
+.bar-segment-slice {
+  flex-shrink:0
+}
+
+.cta-banner-orange-gambar1 {
+  background:#ff8c00;
+  padding:66px 0
+}
+
+.cta-banner-title-g1 {
+  font-size:48px;
+  font-weight:700;
+  letter-spacing:-2px;
+  margin-bottom:24px
+}
+
+.cta-banner-sub-g1 {
+  font-size:18px;
+  margin-bottom:42px
+}
+
+.btn-cta-yellow-solid {
+  background:#ffc400;
+  font-weight:600;
+  padding:16px 32px;
+  border-radius:3px
+}
+
+.btn-cta-white-outline {
+  padding:15px 32px;
+  border-radius:3px
+}
+
+.footer-white-strip-divider {
+  height:96px;
+  background:#efefef
+}
+
+.footer-orange-bar-gambar1 {
+  background:#ff8c00;
+  padding:32px 0
+}
+
+.footer-grid-3cols {
+  align-items:flex-start
+}
+
+.footer-center-links-cols {
+  gap:160px
+}
+
+.footer-bkk-brand-title {
+  font-size:24px;
+  margin-bottom:16px
+}
+
+.fade-in-on-scroll {
+  opacity:1;
+  transform:none;
+  will-change:auto
+}
+
+@media(max-width:1120px) {
+  .hero-heading-white,.hero-heading-orange {
+    font-size:44px
+  }
+  .container {
+    padding-inline:28px
+  }
+  .hero-text-card {
+    max-width:560px
+  }
+  .split-success-journey {
+    gap:48px;
+    padding-inline:0
+  }
+  .path-card-white,.cc-card-item {
+    padding:24px
+  }
+  .cc-briefcase-deco-img {
+    width:90px
+  }
+  .insight-topright-compass {
+    right:20px
+  }
+  .insight-topright-compass-img {
+    width:80px;
+    height:80px
+  }
+  .donut-callout-wrapper {
+    width:300px
+  }
+  .section-laporan-exact>.container {
+    padding-inline:28px
+  }
+  .footer-center-links-cols {
+    gap:60px
+  }
+}
+
+@media(max-width:900px) {
+  .hero-bkk {
+    height:auto;
+    min-height:680px;
+    padding-bottom:32px
+  }
+  .hero-container-flex {
+    padding-top:90px;
+    padding-bottom:80px
+  }
+  .hero-text-card {
+    max-width:620px
+  }
+  .hero-desc-bkk {
+    margin-inline:auto
+  }
+  .hero-stats-panel-wrapper {
+    padding-inline:28px
+  }
+  .hero-stats-panel-glass {
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    padding:22px 12px;
+    gap:8px
+  }
+  .stat-num-value {
+    font-size:30px
+  }
+  .stat-desc-label {
+    font-size:11px
+  }
+  .lowongan-layout-split {
+    grid-template-columns:230px minmax(0,1fr)
+  }
+  .jobs-grid-2col {
+    grid-template-columns:1fr
+  }
+  .career-center-grid-6 {
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+  .split-success-journey {
+    grid-template-columns:1fr 1fr;
+    gap:28px
+  }
+  .testi-avatar-icon {
+    width:64px;
+    height:64px
+  }
+  .testi-verified-seal-img {
+    width:48px;
+    height:48px
+  }
+  .testi-user-badge {
+    gap:12px
+  }
+  .testimonial-card-slide14 {
+    padding:24px
+  }
+  .tracer-2col-layout {
+    grid-template-columns:1fr
+  }
+  .agenda-grid-2col-exact {
+    grid-template-columns:1fr
+  }
+  .agenda-featured-desc-white {
+    max-width:600px
+  }
+  .agenda-grid-right-cards {
+    grid-template-columns:1fr 1fr
+  }
+  .insight-main-subtitle {
+    max-width:70%
+  }
+  .donuts-side-by-side-grid {
+    grid-template-columns:1fr;
+    gap:48px
+  }
+  .donut-col-exact {
+    max-width:460px;
+    width:100%;
+    margin:auto
+  }
+  .rekap-grid-12-exact {
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:60px 18px
+  }
+  .rekap-label-exact,.rekap-sub-exact {
+    font-size:12px
+  }
+  .cta-banner-title-g1 {
+    font-size:36px;
+    letter-spacing:-1px
+  }
+  .alumni-heading-orange {
+    font-size:36px
+  }
+  .alumni-circle-outer,.alumni-badge-top-icon {
+    width:80px;
+    height:80px
+  }
+  .section-laporan-exact {
+    padding-block:70px
+  }
+  .mitra-marquee-track {
+    flex-wrap:wrap;
+    justify-content:center
+  }
+  .mitra-marquee-item {
+    width:28%
+  }
+}
+
+@media(max-width:600px) {
+  .container {
+    padding-inline:20px
+  }
+  .navbar-container {
+    height:70px;
+    gap:8px
+  }
+  .brand-logo-wrapper {
+    gap:8px
+  }
+  .brand-logo-img {
+    width:48px;
+    height:36px
+  }
+  .brand-name {
+    font-size:18px
+  }
+  .brand-tagline {
+    font-size:8px
+  }
+  .btn-login-orange {
+    padding:8px 16px;
+    font-size:13px
+  }
+  .nav-actions {
+    gap:4px
+  }
+  .mobile-nav-drawer {
+    top:70px
+  }
+  .hero-bkk {
+    min-height:720px
+  }
+  .hero-container-flex {
+    padding:64px 20px 48px
+  }
+  .hero-heading-white,.hero-heading-orange {
+    font-size:31px;
+    letter-spacing:-1px
+  }
+  .hero-desc-bkk {
+    font-size:14px;
+    margin-top:20px;
+    line-height:1.6
+  }
+  .hero-overlay-gradient {
+    background:#0007
+  }
+  .hero-bg-image {
+    object-position:40% center
+  }
+  .hero-btn-row {
+    gap:10px
+  }
+  .btn-hero-dark-trans,.btn-hero-orange-pill {
+    padding:10px 16px
+  }
+  .hero-stats-panel-wrapper {
+    padding-inline:20px
+  }
+  .hero-stats-panel-glass {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:20px;
+    padding:22px 12px
+  }
+  .stat-item-box:last-child {
+    grid-column:1/-1
+  }
+  .stat-num-value {
+    font-size:32px
+  }
+  .stat-desc-label {
+    font-size:12px
+  }
+  .section-lowongan-bg {
+    padding:100px 0 60px
+  }
+  .lowongan-layout-split {
+    grid-template-columns:1fr
+  }
+  .lowongan-deco-topleft {
+    transform:scale(.55);
+    transform-origin:top left;
+    left:20px;
+    top:20px
+  }
+  .lowongan-deco-bottomright img {
+    width:50px;
+    height:55px
+  }
+  .title-orange-center {
+    font-size:28px;
+    margin-bottom:28px
+  }
+  .jobs-grid-2col {
+    grid-template-columns:1fr
+  }
+  .card-filter-softblue {
+    padding:24px
+  }
+  .btn-see-all-jobs-orange {
+    margin-top:28px
+  }
+  .section-jalur-wrap,.section-career-center-wrap,#alumni,.section-tracer-wrap,.section-agenda-exact,.section-insight-exact-wrap {
+    padding:54px 0
+  }
+  .paths-4col-grid,.career-center-grid-6 {
+    grid-template-columns:1fr;
+    gap:18px
+  }
+  .path-card-white,.cc-card-item {
+    min-height:0;
+    padding:28px
+  }
+  .path-heading-title,.cc-card-title {
+    font-size:22px
+  }
+  .section-jalur-wrap h2,.section-career-center-wrap h2,.section-tracer-wrap h2 {
+    font-size:28px!important
+  }
+  .section-jalur-wrap .container>div>p,.section-career-center-wrap .container>div>p {
+    font-size:16px!important
+  }
+  .cc-briefcase-deco,.cc-sparkles-deco,.alumni-deco-topleft-badge,.alumni-deco-bottomright-star,.agenda-deco-topright-cal,.agenda-deco-topleft-halfcircle,.insight-topright-compass,.insight-topleft-triangles,.section-tracer-wrap::before,.section-tracer-wrap::after {
+    display:none
+  }
+  .section-mitra-exact-img1 {
+    padding:48px 0 72px
+  }
+  .mitra-title-styled {
+    font-size:36px;
+    letter-spacing:-1px
+  }
+  .mitra-deco-topleft-circles {
+    top:12px;
+    left:10px
+  }
+  .mitra-ornament-circles-img {
+    width:44px
+  }
+  .mitra-ornament-factory-img {
+    width:58px
+  }
+  .mitra-marquee-item {
+    width:44%;
+    height:80px
+  }
+  .mitra-subtext-connected {
+    font-size:16px
+  }
+  .split-success-journey {
+    grid-template-columns:1fr;
+    gap:40px
+  }
+  .alumni-heading-orange {
+    font-size:32px;
+    margin-bottom:20px;
+    letter-spacing:-1px
+  }
+  .alumni-subtitle-dark {
+    font-size:16px
+  }
+  .alumni-circle-outer {
+    display:none
+  }
+  .testi-quote-p {
+    font-size:16px
+  }
+  .stepper-journey-slide14 {
+    padding-left:20px
+  }
+  .stepper-journey-title {
+    font-size:28px
+  }
+  .tracer-bars-card,.tracer-cta-box-orange {
+    padding:24px
+  }
+  .tracer-cta-title-text {
+    font-size:22px
+  }
+  .tracer-bar-labels {
+    font-size:14px
+  }
+  .agenda-title-exact {
+    font-size:28px
+  }
+  .agenda-subtitle-exact {
+    font-size:16px
+  }
+  .agenda-grid-right-cards {
+    grid-template-columns:1fr
+  }
+  .agenda-card-featured-orange {
+    padding:28px
+  }
+  .agenda-featured-title-white {
+    font-size:30px
+  }
+  .agenda-featured-desc-white {
+    font-size:16px
+  }
+  .insight-main-title {
+    font-size:32px;
+    letter-spacing:-1px
+  }
+  .insight-main-subtitle {
+    max-width:100%;
+    font-size:16px
+  }
+  .insight-5cards-grid {
+    grid-template-columns:1fr;
+    gap:24px
+  }
+  .insight-arrow-illustration-slot {
+    display:none
+  }
+  .insight-card-body-exact {
+    padding:24px
+  }
+  .rekap-grid-12-exact {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:62px 18px
+  }
+  .rekap-num-bold-exact {
+    font-size:32px
+  }
+  .rekap-circle-badge-exact {
+    width:70px;
+    height:70px;
+    top:-36px
+  }
+  .section-laporan-exact>.container {
+    padding-inline:12px
+  }
+  .laporan-card-white-exact {
+    padding:24px 12px 36px
+  }
+  .donut-title-exact {
+    font-size:16px
+  }
+  .donut-callout-wrapper {
+    width:260px;
+    height:260px
+  }
+  .donut-svg-stage {
+    width:210px;
+    height:210px
+  }
+  .donut-tag-label,.donut-tag-val {
+    font-size:12px
+  }
+  .donut-legend-exact-row {
+    margin-left:12px
+  }
+  .legend-exact-item {
+    font-size:13px
+  }
+  .donut-col-exact:nth-child(2) .donut-legend-exact-row {
+    margin-right:12px
+  }
+  .barchart-stage-container {
+    height:270px;
+    margin-left:38px
+  }
+  .grid-line-val {
+    font-size:11px;
+    left:-34px
+  }
+  .bar-cat-label-bottom {
+    font-size:9px;
+    letter-spacing:0
+  }
+  .year-pill-exact {
+    font-size:11px
+  }
+  .year-pill-rect {
+    width:18px;
+    height:10px
+  }
+  .yearly-chart-title {
+    font-size:16px
+  }
+  .cta-banner-title-g1 {
+    font-size:30px;
+    letter-spacing:-1px
+  }
+  .cta-banner-sub-g1 {
+    font-size:16px
+  }
+  .cta-banner-orange-gambar1 {
+    padding:52px 0
+  }
+  .footer-white-strip-divider {
+    height:56px
+  }
+  .footer-grid-3cols {
+    flex-direction:column;
+    gap:24px
+  }
+  .footer-center-links-cols {
+    gap:48px
+  }
+  .footer-bkk-brand-title {
+    font-size:22px
+  }
+  .modal-dialog-box {
+    max-width:calc(100vw - 32px)
+  }
+  .toast-notice {
+    width:calc(100% - 32px);
+    border-radius:12px;
+    font-size:14px
+  }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  html {
+    scroll-behavior:auto
+  }
+  *,*::before,*::after {
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important
+  }
+}
+
+/* Final alignment after desktop and mobile browser review. */
+.insight-topleft-triangles img {
+  width:74px;
+  height:100px;
+  object-fit:contain
+}
+
+.section-insight-exact-wrap .container>div:last-child {
+  margin-top:0!important
+}
+
+.section-laporan-exact .donut-col-exact {
+  position:relative;
+  padding-bottom:36px
+}
+
+.donut-callout-wrapper {
+  height:340px
+}
+
+.donut-legend-exact-row {
+  margin-top:-40px;
+  position:relative
+}
+
+.donut-callout-tag {
+  background:#fff
+}
+
+.donut-col-exact:first-child .donut-callout-tag:nth-of-type(3) {
+  top:135px!important;
+  right:-45px!important
+}
+
+.donut-col-exact:first-child .donut-callout-tag:nth-of-type(4) {
+  bottom:60px!important;
+  right:-45px!important
+}
+
+.donut-col-exact:first-child .donut-callout-tag:nth-of-type(5) {
+  top:150px!important;
+  left:-50px!important
+}
+
+.donut-col-exact:nth-child(2) .donut-callout-tag:nth-of-type(5) {
+  top:155px!important;
+  left:-65px!important
+}
+
+.donut-col-exact:nth-child(2) .donut-callout-tag:nth-of-type(4) {
+  bottom:10px!important;
+  left:-10px!important
+}
+
+.alumni-deco-topleft-badge {
+  top:60px;
+  left:60px
+}
+
+.mitra-marquee-item img {
+  width:100%!important
+}
+
+.section-laporan-exact .laporan-card-white-exact:last-child {
+  margin-bottom:0
+}
+
+@media(max-width:600px) {
+  .donut-callout-wrapper {
+    width:250px;
+    height:270px
+  }
+  .donut-col-exact:first-child .donut-callout-tag:nth-of-type(3) {
+    right:-16px!important;
+    top:115px!important
+  }
+  .donut-col-exact:first-child .donut-callout-tag:nth-of-type(4) {
+    right:-16px!important;
+    bottom:35px!important
+  }
+  .donut-col-exact:first-child .donut-callout-tag:nth-of-type(5) {
+    left:-14px!important;
+    top:140px!important
+  }
+  .donut-col-exact:nth-child(2) .donut-callout-tag:nth-of-type(5) {
+    left:-18px!important;
+    top:140px!important
+  }
+  .donut-legend-exact-row {
+    margin-top:10px
+  }
+  .section-laporan-exact .donut-col-exact {
+    padding-bottom:0
+  }
+  .alumni-deco-topleft-badge {
+    display:none
+  }
+}
+

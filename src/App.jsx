@@ -1,5 +1,11 @@
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import './App.css';
+import './prototype.css';
+import './motion.css';
+import { DesktopNavigation } from './Motion';
+import { usePageReveal } from './usePageReveal';
+import { CountUp } from './CountUp';
+import { useChartMotion } from './useChartMotion';
 import {
   navLinks,
   heroStats,
@@ -12,163 +18,14 @@ import {
   featuredAgenda,
   upcomingAgendas,
   industryPartners,
-  partnershipPencapaian,
   absorptionDonuts,
   yearlyAbsorptionChart,
   careerArticles,
   recapMetrics
 } from './data/bkkData';
 
-// Custom Hook to detect when element enters viewport
-function useInView(options = { threshold: 0.15, triggerOnce: true }) {
-  const [isInView, setIsInView] = useState(false);
-  const ref = useRef(null);
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsInView(true);
-        if (options.triggerOnce) {
-          observer.unobserve(el);
-        }
-      } else if (!options.triggerOnce) {
-        setIsInView(false);
-      }
-    }, options);
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [options.threshold, options.triggerOnce]);
-
-  return [ref, isInView];
-}
-
-// Animated Number Counter Component
-function AnimatedNumber({ value, isVisible, duration = 1600, prefix = '', suffix = '' }) {
-  const [count, setCount] = useState(0);
-  const strVal = String(value || '0');
-  const numericVal = parseInt(strVal.replace(/[^0-9]/g, ''), 10) || 0;
-  const hasComma = strVal.includes(',');
-
-  useEffect(() => {
-    if (!isVisible) {
-      setCount(0);
-      return;
-    }
-    let startTime = null;
-    let animFrame = null;
-
-    const animate = (timestamp) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(ease * numericVal));
-
-      if (progress < 1) {
-        animFrame = requestAnimationFrame(animate);
-      } else {
-        setCount(numericVal);
-      }
-    };
-
-    animFrame = requestAnimationFrame(animate);
-    return () => {
-      if (animFrame) cancelAnimationFrame(animFrame);
-    };
-  }, [isVisible, numericVal, duration]);
-
-  const formatted = hasComma ? count.toLocaleString('en-US') : count;
-  return <>{prefix}{formatted}{suffix}</>;
-}
-
-// Random Number Scrambling / Rolling Slot Animation Component
-function RandomScrambleNumber({ value, isVisible = true, duration = 1600, className = '' }) {
-  const rawStr = String(value || '');
-  const [displayText, setDisplayText] = useState(() => rawStr);
-  const [isHoverScrambling, setIsHoverScrambling] = useState(false);
-
-  useEffect(() => {
-    if (!isVisible) {
-      setDisplayText(rawStr.replace(/[0-9]/g, '0'));
-      return;
-    }
-
-    const chars = rawStr.split('');
-    const digitIndices = [];
-    chars.forEach((c, idx) => {
-      if (/[0-9]/.test(c)) {
-        digitIndices.push(idx);
-      }
-    });
-
-    if (digitIndices.length === 0) {
-      setDisplayText(rawStr);
-      return;
-    }
-
-    let startTime = null;
-    let animFrame = null;
-    let lastShuffleTime = 0;
-
-    const animate = (timestamp) => {
-      if (!startTime) startTime = timestamp;
-      const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
-
-      if (timestamp - lastShuffleTime > 35 || progress >= 1) {
-        lastShuffleTime = timestamp;
-
-        if (progress >= 1) {
-          setDisplayText(rawStr);
-          return;
-        }
-
-        const resolvedCount = Math.floor(ease * digitIndices.length);
-        const currentChars = [...chars];
-
-        digitIndices.forEach((charIdx, i) => {
-          if (i < resolvedCount) {
-            currentChars[charIdx] = chars[charIdx];
-          } else {
-            currentChars[charIdx] = String(Math.floor(Math.random() * 10));
-          }
-        });
-
-        setDisplayText(currentChars.join(''));
-      }
-
-      if (progress < 1) {
-        animFrame = requestAnimationFrame(animate);
-      } else {
-        setDisplayText(rawStr);
-      }
-    };
-
-    animFrame = requestAnimationFrame(animate);
-    return () => {
-      if (animFrame) cancelAnimationFrame(animFrame);
-    };
-  }, [value, isVisible, duration, isHoverScrambling]);
-
-  const triggerHoverScramble = () => {
-    setIsHoverScrambling((prev) => !prev);
-  };
-
-  return (
-    <span 
-      className={`scramble-number-display ${className}`}
-      onMouseEnter={triggerHoverScramble}
-      style={{ display: 'inline-block', fontVariantNumeric: 'tabular-nums' }}
-    >
-      {displayText}
-    </span>
-  );
-}
-
-function PartnerLogo({ logoUrl, type, name, className = '', style = {} }) {
+function PartnerLogo({ logoUrl, type, name, className = '', style = {}, loading = 'lazy' }) {
   if (logoUrl) {
     return (
       <img
@@ -176,7 +33,7 @@ function PartnerLogo({ logoUrl, type, name, className = '', style = {} }) {
         alt={name}
         className={`partner-img-logo ${className}`}
         style={{ maxHeight: '72px', maxWidth: '210px', width: 'auto', objectFit: 'contain', ...style }}
-        loading="lazy"
+        loading={loading}
       />
     );
   }
@@ -261,18 +118,20 @@ function PartnerLogo({ logoUrl, type, name, className = '', style = {} }) {
 function DonutChartSweep({ id, slices, size = 180, strokeWidth = 34 }) {
   const viewBoxSize = 240;
   const center = viewBoxSize / 2; // 120
-  const radius = 76;
-  const circumference = 2 * Math.PI * radius; // ~477.522
+  const radius = 100;
+  const circumference = 2 * Math.PI * radius;
 
-  let accumulated = 0;
+
 
   return (
-    <div className="donut-svg-stage">
+    <div className="donut-svg-stage" style={{ '--donut-circumference': circumference }}>
       <svg
         width={size}
         height={size}
         viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
         className="donut-svg-element"
+        role="img"
+        aria-label={slices.map((slice) => `${slice.name}: ${slice.pct}%`).join(', ')}
       >
         <defs>
           <mask
@@ -314,8 +173,7 @@ function DonutChartSweep({ id, slices, size = 180, strokeWidth = 34 }) {
         <g mask={`url(#donut-sweep-mask-${id})`}>
           {slices.map((slice, i) => {
             const sliceLength = (slice.pct / 100) * circumference;
-            const currentOffset = -accumulated;
-            accumulated += sliceLength;
+            const currentOffset = -slices.slice(0, i).reduce((sum, previous) => sum + previous.pct / 100 * circumference, 0);
 
             return (
               <circle
@@ -351,6 +209,7 @@ export default function App() {
   const [selectedLocation, setSelectedLocation] = useState('ALL');
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [showAllJobs, setShowAllJobs] = useState(false);
+  const [showAllArticles, setShowAllArticles] = useState(false);
   const [selectedJobModal, setSelectedJobModal] = useState(null);
 
   // Testimonial Carousel State
@@ -386,29 +245,8 @@ export default function App() {
     password: ''
   });
 
-  // Scroll Fade-in Intersection Observer
-  useEffect(() => {
-    const observerCallback = (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    };
-
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px 0px -40px 0px',
-      threshold: 0.08
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-    const elements = document.querySelectorAll('.fade-in-on-scroll');
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
+  usePageReveal();
+  useChartMotion();
 
   // Show Toast Helper
   const triggerToast = (msg) => {
@@ -533,17 +371,7 @@ export default function App() {
           </a>
 
           {/* Desktop Nav */}
-          <nav className="nav-menu-desktop">
-            {navLinks.map((link) => (
-              <a
-                key={link.id}
-                href={`#${link.id}`}
-                className={`nav-link-item ${activeNav === link.id ? 'active' : ''}`}
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
+          <DesktopNavigation links={navLinks} activeId={activeNav} />
 
           {/* Action Buttons */}
           <div className="nav-actions">
@@ -605,10 +433,10 @@ export default function App() {
 
         <div className="container hero-container-flex">
           <div className="hero-text-card">
-            <div className="hero-title-group">
+            <h1 className="hero-title-group">
               <span className="hero-heading-white">BURSA KERJA KHUSUS</span>
               <span className="hero-heading-orange">SMKN 1 BONDOWOSO</span>
-            </div>
+            </h1>
 
             <p className="hero-desc-bkk">
               Website BKK (Bursa Kerja Khusus) adalah platform digital yang dikelola oleh lembaga pendidik SMK bekerja sama dengan Dinas Tenaga Kerja untuk memfasilitasi penyaluran kerja alumni serta menjembatani mereka dengan dunia usaha dan industri.
@@ -626,18 +454,13 @@ export default function App() {
           </div>
         </div>
 
-        {/* Watermark Broadcast TV bottom right */}
-        <div style={{ position: 'absolute', bottom: 12, right: 24, zIndex: 4, color: 'rgba(255,255,255,0.7)', fontSize: '0.72rem', fontWeight: 600, textAlign: 'right', pointerEvents: 'none', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>
-          PROPERTY OF BROADCAST.TV<br />smkn 1 bondowoso
-        </div>
-
         {/* Floating Statistics Panel inside Hero Section */}
         <div className="container hero-stats-panel-wrapper">
           <div className="hero-stats-panel-glass">
             {heroStats.map((stat, idx) => (
               <div key={idx} className="stat-item-box">
                 <span className="stat-num-value">
-                  <RandomScrambleNumber value={stat.value} duration={1400 + idx * 200} />
+                  <CountUp value={stat.value} duration={2200 + idx * 150} />
                 </span>
                 <span className="stat-desc-label">{stat.label}</span>
               </div>
@@ -657,12 +480,7 @@ export default function App() {
         </div>
 
         {/* Bottom-right decorative orange shapes */}
-        <div className="lowongan-deco-bottomright">
-          <svg width="68" height="68" viewBox="0 0 100 100" fill="none">
-            <rect x="25" y="10" width="20" height="50" rx="10" transform="rotate(30 25 10)" fill="#ff7700" />
-            <rect x="55" y="30" width="20" height="50" rx="10" transform="rotate(30 55 30)" fill="#f59e0b" />
-          </svg>
-        </div>
+        <div className="lowongan-deco-bottomright"><img src="/img/Group 147.png" alt="" /></div>
 
         <div className="container" style={{ position: 'relative', zIndex: 2 }}>
           <h2 className="title-orange-center">Lowongan Terbaru</h2>
@@ -682,8 +500,9 @@ export default function App() {
               </div>
 
               <div className="filter-field-block">
-                <label className="filter-field-label">Jurusan</label>
+                <label htmlFor="job-major" className="filter-field-label">Jurusan</label>
                 <select
+                  id="job-major"
                   className="filter-select-styled"
                   value={selectedMajor}
                   onChange={(e) => setSelectedMajor(e.target.value)}
@@ -701,9 +520,10 @@ export default function App() {
               </div>
 
               <div className="filter-field-block">
-                <label className="filter-field-label">Cari Lowongan</label>
+                <label htmlFor="job-search" className="filter-field-label">Cari Lowongan</label>
                 <input
                   type="text"
+                  id="job-search"
                   placeholder="Cari..."
                   className="filter-input-styled"
                   value={searchQuery}
@@ -712,8 +532,9 @@ export default function App() {
               </div>
 
               <div className="filter-field-block">
-                <label className="filter-field-label">Lokasi</label>
+                <label htmlFor="job-location" className="filter-field-label">Lokasi</label>
                 <select
+                  id="job-location"
                   className="filter-select-styled"
                   value={selectedLocation}
                   onChange={(e) => setSelectedLocation(e.target.value)}
@@ -746,6 +567,7 @@ export default function App() {
             {/* Right Job Cards Grid */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div className="jobs-grid-2col" style={{ width: '100%' }}>
+                {displayedJobs.length === 0 && <p className="jobs-empty" role="status">Belum ada lowongan yang sesuai. Coba kata kunci atau filter lain.</p>}
                 {displayedJobs.map((job) => (
                   <div key={job.id} className="job-card-white">
                     <div>
@@ -819,12 +641,7 @@ export default function App() {
           4. TEMUKAN JALURMU (SLIDE 12)
           --------------------------------------------------- */}
       <section id="jalur" className="section-jalur-wrap fade-in-on-scroll">
-        <div className="jalur-deco-corner">
-          <svg width="84" height="84" viewBox="0 0 100 100" fill="none">
-            <polygon points="100,0 100,100 0,100" fill="#ff7700" opacity="0.9" />
-            <polygon points="100,40 100,100 40,100" fill="#f59e0b" />
-          </svg>
-        </div>
+        <div className="jalur-deco-corner"><img src="/img/Group 75.png" alt="" /></div>
 
         <div className="container" style={{ position: 'relative', zIndex: 2 }}>
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
@@ -859,7 +676,7 @@ export default function App() {
         </div>
 
         <div className="cc-sparkles-deco">
-          <img src="/asset/icon/brand-zapier 1.png" alt="" style={{ width: '38px', opacity: 0.85 }} />
+          <img src="/img/Group 77.png" alt="" style={{ width: '64px' }} />
         </div>
 
         <div className="container" style={{ position: 'relative', zIndex: 2 }}>
@@ -889,13 +706,83 @@ export default function App() {
       {/* ---------------------------------------------------
           6. KISAH SUKSES ALUMNI & CAREER JOURNEY (GAMBAR 2)
           --------------------------------------------------- */}
+      <section id="mitra-industri" className="section-mitra-exact-img1 fade-in-on-scroll">
+        {/* Top-Left Overlapping Dual Circles Ornament */}
+        <div className="mitra-deco-topleft-circles">
+          <img
+            src="/img/mitra-circles-ornament.png"
+            alt="Ornamen Mitra"
+            className="mitra-ornament-circles-img"
+          />
+        </div>
+
+        {/* Bottom-Right Orange Factory Ornament */}
+        <div className="mitra-deco-factory-bottomright">
+          <img
+            src="/img/building-factory-2 1.png"
+            alt="Ornamen Pabrik"
+            className="mitra-ornament-factory-img"
+          />
+        </div>
+
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          <div className="mitra-title-header-centered">
+            <h2 className="mitra-title-styled">
+              <span className="mitra-title-orange">Mitra</span> <span className="mitra-title-black">Industri</span>
+            </h2>
+          </div>
+
+          {/* Continuous Infinite Marquee Logos Track with Larger Sizes */}
+          <div
+            className="mitra-marquee-wrapper"
+            role="button"
+            tabIndex={0}
+            aria-label="Lihat semua mitra industri"
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                setShowMitraModal(true);
+              }
+            }}
+            onClick={() => setShowMitraModal(true)}
+            title="Klik untuk melihat detail semua mitra industri"
+          >
+            <div className="mitra-marquee-track">
+              {[0, 1].map((copy) => (
+                <div className="mitra-marquee-group" key={copy} aria-hidden={copy === 1 ? true : undefined}>
+                  {industryPartners.map((partner) => (
+                    <div key={partner.id} className="mitra-marquee-item" title={partner.name}>
+                      <PartnerLogo logoUrl={partner.logoUrl} type={partner.logoType} name={copy === 1 ? '' : partner.name} loading="eager" />
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mitra-footer-text-block">
+            <p className="mitra-subtext-connected">
+              Terhubung dengan berbagai perusahaan dan dunia usaha/dunia industri
+            </p>
+            <button
+              type="button"
+              className="mitra-link-gold"
+              onClick={() => setShowMitraModal(true)}
+            >
+              <span>Lihat Semua Mitra</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
       <section id="alumni" className="section-kisah-sukses-wrap fade-in-on-scroll">
         {/* Top-Left Orange Circular Badge with Alumni/Person Icon (Gambar 2) */}
         <div className="alumni-deco-topleft-badge">
           <div className="alumni-circle-outer">
             <img
-              src="/img/PesertaDidik_icon.png"
-              alt="Icon Alumni"
+              src="/img/accessible 1.png"
+              alt=""
               className="alumni-badge-top-icon"
             />
           </div>
@@ -1057,7 +944,7 @@ export default function App() {
 
               <div style={{ textAlign: 'center', marginTop: '24px', paddingTop: '18px', borderTop: '1px solid #f1f5f9' }}>
                 <div className="tracer-total-number">
-                  <AnimatedNumber value={1250} isVisible={true} duration={1800} suffix="+" />
+                  <span>1.250</span>
                 </div>
                 <div style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600 }}>
                   {tracerStudyStats.totalLabel}
@@ -1066,7 +953,7 @@ export default function App() {
             </div>
 
             {/* Right Orange CTA Card */}
-            <div className="tracer-cta-box-orange">
+            <div className="tracer-cta-column"><div className="tracer-cta-box-orange">
               <h3 className="tracer-cta-title-text">{tracerStudyStats.ctaText}</h3>
               <button
                 type="button"
@@ -1076,9 +963,7 @@ export default function App() {
                 <span>Isi Tracer Study</span>
                 <span className="tracer-btn-arrow">→</span>
               </button>
-              <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.85)', marginTop: '20px', lineHeight: 1.5 }}>
-                {tracerStudyStats.subtext}
-              </p>
+</div><p className="tracer-note">{tracerStudyStats.subtext}</p>
             </div>
           </div>
         </div>
@@ -1138,8 +1023,8 @@ export default function App() {
                 >
                   <div className="agenda-mini-icon-orange">
                     <img
-                      src="/img/event_160dp_FF8C00_FILL1_wght400_GRAD0_opsz48 1.png"
-                      alt="Agenda Event"
+                      src="/img/Container (11).png"
+                      alt=""
                       className="agenda-mini-icon-img"
                     />
                   </div>
@@ -1157,100 +1042,123 @@ export default function App() {
       {/* ---------------------------------------------------
           9. MITRA INDUSTRI (SESUAI DESAIN DENGAN MARQUEE BESAR)
           --------------------------------------------------- */}
-      <section id="mitra-industri" className="section-mitra-exact-img1 fade-in-on-scroll">
-        {/* Top-Left Overlapping Dual Circles Ornament */}
-        <div className="mitra-deco-topleft-circles">
-          <img
-            src="/img/mitra-circles-ornament.png"
-            alt="Ornamen Mitra"
-            className="mitra-ornament-circles-img"
-          />
-        </div>
 
-        {/* Bottom-Right Orange Factory Ornament */}
-        <div className="mitra-deco-factory-bottomright">
+
+      {/* ---------------------------------------------------
+          10. LAPORAN KETERSERAPAN LULUSAN (IMAGE 3 / SLIDE 17)
+          --------------------------------------------------- */}
+
+
+      {/* ---------------------------------------------------
+          11. TIPS & INSIGHT KARIR (IMAGE 1 / SLIDE 18)
+          --------------------------------------------------- */}
+      <section id="insight-karier" className="section-insight-exact-wrap fade-in-on-scroll">
+        {/* Top-Left Triangles (Image 1) */}
+        <div className="insight-topleft-triangles"><img src="/img/Group 149.png" alt="" /></div>
+
+        {/* Top-Right Compass Badge using PNG (Image 1) */}
+        <div className="insight-topright-compass">
           <img
-            src="/img/building-factory-2 1.png"
-            alt="Ornamen Pabrik"
-            className="mitra-ornament-factory-img"
+            src="/img/explore_160dp_FF8C00_FILL1_wght400_GRAD0_opsz48 1.png"
+            alt="Compass Icon"
+            className="insight-topright-compass-img"
           />
         </div>
 
         <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          <div className="mitra-title-header-centered">
-            <h2 className="mitra-title-styled">
-              <span className="mitra-title-orange">Mitra</span> <span className="mitra-title-black">Industri</span>
+          <div className="insight-header-centered">
+            <h2 className="insight-main-title">
+              <span className="text-orange-part">Tips & </span>Insight Karir
             </h2>
-          </div>
-
-          {/* Continuous Infinite Marquee Logos Track with Larger Sizes */}
-          <div
-            className="mitra-marquee-wrapper"
-            onClick={() => setShowMitraModal(true)}
-            title="Klik untuk melihat detail semua mitra industri"
-          >
-            <div className="mitra-marquee-track">
-              {/* Loop 1 */}
-              {industryPartners.map((partner) => (
-                <div
-                  key={`m1-${partner.id}`}
-                  className="mitra-marquee-item"
-                  title={`${partner.name} — ${partner.badge}`}
-                >
-                  <PartnerLogo logoUrl={partner.logoUrl} type={partner.logoType} name={partner.name} />
-                </div>
-              ))}
-              {/* Loop 2 (Seamless loop duplicate) */}
-              {industryPartners.map((partner) => (
-                <div
-                  key={`m2-${partner.id}`}
-                  className="mitra-marquee-item"
-                  title={`${partner.name} — ${partner.badge}`}
-                >
-                  <PartnerLogo logoUrl={partner.logoUrl} type={partner.logoType} name={partner.name} />
-                </div>
-              ))}
-              {/* Loop 3 */}
-              {industryPartners.map((partner) => (
-                <div
-                  key={`m3-${partner.id}`}
-                  className="mitra-marquee-item"
-                  title={`${partner.name} — ${partner.badge}`}
-                >
-                  <PartnerLogo logoUrl={partner.logoUrl} type={partner.logoType} name={partner.name} />
-                </div>
-              ))}
-              {/* Loop 4 */}
-              {industryPartners.map((partner) => (
-                <div
-                  key={`m4-${partner.id}`}
-                  className="mitra-marquee-item"
-                  title={`${partner.name} — ${partner.badge}`}
-                >
-                  <PartnerLogo logoUrl={partner.logoUrl} type={partner.logoType} name={partner.name} />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mitra-footer-text-block">
-            <p className="mitra-subtext-connected">
-              Terhubung dengan berbagai perusahaan dan dunia usaha/dunia industri
+            <p className="insight-main-subtitle">
+              Edukasi dan panduan praktis untuk mempersiapkan langkah kariermu setelah lulus sekolah.
             </p>
+          </div>
+
+          {/* 5 Cards + 1 Large Arrow Illustration Grid (Image 1) */}
+          <div className="insight-5cards-grid">
+            {(showAllArticles ? careerArticles : careerArticles.slice(0, 5)).map((art) => (
+              <div key={art.id} className="insight-card-exact">
+                <div className="insight-photo-box">
+                  <img src={art.image} alt={art.title} className="insight-photo-img" />
+                  <span className="insight-category-pill">{art.category}</span>
+                </div>
+                <div className="insight-card-body-exact">
+                  <h3 className="insight-h3-title">{art.title}</h3>
+                  <p className="insight-p-desc">{art.excerpt}</p>
+                  <button
+                    type="button"
+                    className="insight-link-yellow"
+                    onClick={() => setSelectedArticleModal(art)}
+                  >
+                    <span>Baca Selengkapnya</span>
+                    <span>→</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            {/* 6th Slot - Big Orange Segmented Directional Arrow PNG (Image 1) */}
+            {!showAllArticles && <div className="insight-arrow-illustration-slot">
+              <img
+                src="/img/arrow-big-right-lines 1.png"
+                alt="Arah Karier"
+                className="insight-big-arrow-img"
+              />
+            </div>}
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: '36px' }}>
             <button
               type="button"
-              className="mitra-link-gold"
-              onClick={() => setShowMitraModal(true)}
+              className="btn-see-all-jobs-orange"
+              onClick={() => setShowAllArticles(!showAllArticles)}
             >
-              <span>Lihat Semua Mitra</span>
-              <span>→</span>
+              {showAllArticles ? 'Tampilkan Lebih Sedikit' : 'Lihat Semua Artikel'}
             </button>
           </div>
         </div>
       </section>
 
       {/* ---------------------------------------------------
-          10. LAPORAN KETERSERAPAN LULUSAN (IMAGE 3 / SLIDE 17)
+          12. REKAPITULASI (IMAGE 2 / SLIDE 19)
+          --------------------------------------------------- */}
+      <section id="rekapitulasi" className="section-rekap-exact-wrap fade-in-on-scroll">
+        <div className="container" style={{ textAlign: 'center' }}>
+          {/* Top Pill Badge (Image 2) */}
+          <span className="rekap-pill-badge-top">REKAPITULASI</span>
+
+          {/* 12 Metric Cards (Image 2) with exact PNG icons and animated random scramble counters */}
+          <div className="rekap-grid-12-exact">
+            {recapMetrics.map((r, idx) => (
+              <div
+                key={r.id}
+                className="rekap-box-exact"
+                style={{
+                  animationDelay: `${idx * 0.05}s`
+                }}
+              >
+                <div className="rekap-circle-badge-exact">
+                  <img
+                    src={r.iconImg}
+                    alt={r.label}
+                    className="rekap-badge-img"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="rekap-num-bold-exact">
+                  <CountUp value={r.number} duration={2000 + (idx % 4) * 160} />
+                </div>
+                <div className="rekap-label-exact">{r.label}</div>
+                <div className="rekap-sub-exact">{r.sub}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------
+          13. PRE-FOOTER CTA BANNER & FOOTER (GAMBAR 1)
           --------------------------------------------------- */}
       <section id="laporan-lulusan" className="section-laporan-exact fade-in-on-scroll">
         <div className="container">
@@ -1380,9 +1288,8 @@ export default function App() {
                     <div
                       className="bar-pillar-stacked"
                       style={{
-                        height: `${col.heightPct * 2.4}px`,
-                        animation: `barPillarGrow 1.2s cubic-bezier(0.34, 1.4, 0.64, 1) forwards`,
-                        animationDelay: `${cIdx * 0.18}s`
+                        height: `${col.heightPct}%`,
+                        '--bar-delay': `${cIdx * 170}ms`
                       }}
                     >
                       {col.segments.map((seg, sIdx) => (
@@ -1390,7 +1297,9 @@ export default function App() {
                           key={sIdx}
                           className="bar-segment-slice"
                           style={{
-                            height: `${seg.h}px`,
+                            flex: seg.h,
+                            '--segment-delay': `${cIdx * 170 + sIdx * 65 + 180}ms`,
+                            minHeight: 0,
                             backgroundColor: seg.color,
                             width: '100%'
                           }}
@@ -1407,122 +1316,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* ---------------------------------------------------
-          11. TIPS & INSIGHT KARIR (IMAGE 1 / SLIDE 18)
-          --------------------------------------------------- */}
-      <section id="insight-karier" className="section-insight-exact-wrap fade-in-on-scroll">
-        {/* Top-Left Triangles (Image 1) */}
-        <div className="insight-topleft-triangles">
-          <svg width="84" height="84" viewBox="0 0 100 100" fill="none">
-            <polygon points="0,0 80,45 0,90" fill="#0284c7" />
-            <polygon points="0,35 60,65 0,95" fill="#f59e0b" />
-          </svg>
-        </div>
-
-        {/* Top-Right Compass Badge using PNG (Image 1) */}
-        <div className="insight-topright-compass">
-          <img
-            src="/img/explore_160dp_FF8C00_FILL1_wght400_GRAD0_opsz48 1.png"
-            alt="Compass Icon"
-            className="insight-topright-compass-img"
-          />
-        </div>
-
-        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          <div className="insight-header-centered">
-            <h2 className="insight-main-title">
-              <span className="text-orange-part">Tips & </span>Insight Karir
-            </h2>
-            <p className="insight-main-subtitle">
-              Edukasi dan panduan praktis untuk mempersiapkan langkah kariermu setelah lulus sekolah.
-            </p>
-          </div>
-
-          {/* 5 Cards + 1 Large Arrow Illustration Grid (Image 1) */}
-          <div className="insight-5cards-grid">
-            {careerArticles.map((art) => (
-              <div key={art.id} className="insight-card-exact">
-                <div className="insight-photo-box">
-                  <img src={art.image} alt={art.title} className="insight-photo-img" />
-                  <span className="insight-category-pill">{art.category}</span>
-                </div>
-                <div className="insight-card-body-exact">
-                  <h3 className="insight-h3-title">{art.title}</h3>
-                  <p className="insight-p-desc">{art.excerpt}</p>
-                  <button
-                    type="button"
-                    className="insight-link-yellow"
-                    onClick={() => setSelectedArticleModal(art)}
-                  >
-                    <span>Baca Selengkapnya</span>
-                    <span>→</span>
-                  </button>
-                </div>
-              </div>
-            ))}
-
-            {/* 6th Slot - Big Orange Segmented Directional Arrow PNG (Image 1) */}
-            <div className="insight-arrow-illustration-slot">
-              <img
-                src="/img/arrow-big-right-lines 1.png"
-                alt="Arah Karier"
-                className="insight-big-arrow-img"
-              />
-            </div>
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: '36px' }}>
-            <button
-              type="button"
-              className="btn-see-all-jobs-orange"
-              onClick={() => setSelectedArticleModal(careerArticles[0])}
-            >
-              Lihat Semua Artikel
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------------------------------------------
-          12. REKAPITULASI (IMAGE 2 / SLIDE 19)
-          --------------------------------------------------- */}
-      <section id="rekapitulasi" className="section-rekap-exact-wrap fade-in-on-scroll">
-        <div className="container" style={{ textAlign: 'center' }}>
-          {/* Top Pill Badge (Image 2) */}
-          <span className="rekap-pill-badge-top">REKAPITULASI</span>
-
-          {/* 12 Metric Cards (Image 2) with exact PNG icons and animated random scramble counters */}
-          <div className="rekap-grid-12-exact">
-            {recapMetrics.map((r, idx) => (
-              <div
-                key={r.id}
-                className="rekap-box-exact"
-                style={{
-                  animationDelay: `${idx * 0.05}s`
-                }}
-              >
-                <div className="rekap-circle-badge-exact">
-                  <img
-                    src={r.iconImg}
-                    alt={r.label}
-                    className="rekap-badge-img"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="rekap-num-bold-exact">
-                  <RandomScrambleNumber value={r.number} duration={1300 + (idx % 4) * 160} />
-                </div>
-                <div className="rekap-label-exact">{r.label}</div>
-                <div className="rekap-sub-exact">{r.sub}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------------------------------------------
-          13. PRE-FOOTER CTA BANNER & FOOTER (GAMBAR 1)
-          --------------------------------------------------- */}
       <section className="cta-banner-orange-gambar1">
         <div className="container">
           <h2 className="cta-banner-title-g1">Masa depanmu dimulai dari satu langkah.</h2>

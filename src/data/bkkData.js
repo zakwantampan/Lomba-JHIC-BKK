@@ -23,28 +23,28 @@ export const careerPaths = [
     title: "Bekerja",
     desc: "Bergabung dengan dunia industri sesuai kompetensi keahlianmu.",
     icon: "briefcase",
-    iconImg: "/img/work_40dp_FFFFFF_FILL1_wght400_GRAD0_opsz40 1.png"
+    iconImg: "/img/Container (3).png"
   },
   {
     id: "kuliah",
     title: "Melanjutkan Studi",
     desc: "Lanjut ke perguruan tinggi dan kembangkan kompetensimu.",
     icon: "graduation",
-    iconImg: "/img/school_40dp_FFFFFF_FILL1_wght400_GRAD0_opsz40 1.png"
+    iconImg: "/img/Container (2).png"
   },
   {
     id: "wirausaha",
     title: "Wirausaha",
     desc: "Bangun bisnis dan ciptakan peluangmu sendiri.",
     icon: "rocket",
-    iconImg: "/img/home_work_40dp_FFFFFF_FILL1_wght400_GRAD0_opsz40 1.png"
+    iconImg: "/img/Container (1).png"
   },
   {
     id: "magang",
     title: "Magang",
     desc: "Dapatkan pengalaman langsung di dunia industri.",
     icon: "globe",
-    iconImg: "/img/automation_40dp_FFFFFF_FILL1_wght400_GRAD0_opsz40 1.png"
+    iconImg: "/img/Container.png"
   }
 ];
 
@@ -165,12 +165,12 @@ export const jobsData = [
 ];
 
 export const careerCenterPrograms = [
-  { id: 1, title: "Career Guidance", desc: "Konsultasi dan bimbingan untuk menentukan arah karier.", icon: "guidance", iconImg: "/asset/icon/crowdsource_40dp_FFFFFF_FILL1_wght400_GRAD0_opsz40 1.png" },
-  { id: 2, title: "CV & Portfolio", desc: "Membantu siswa membuat CV dan portfolio yang profesional.", icon: "document", iconImg: "/asset/icon/history_edu_40dp_FFFFFF_FILL1_wght400_GRAD0_opsz40 1.png" },
-  { id: 3, title: "Interview Preparation", desc: "Simulasi interview dan persiapan menghadapi proses rekrutmen.", icon: "microphone", iconImg: "/asset/icon/attachment_40dp_FFFFFF_FILL1_wght400_GRAD0_opsz40 1.png" },
-  { id: 4, title: "Industrial Recruitment", desc: "Rekrutmen langsung dari perusahaan mitra.", icon: "building", iconImg: "/asset/icon/corporate_fare_40dp_FFFFFF_FILL1_wght400_GRAD0_opsz40 1.png" },
-  { id: 5, title: "Job Matching", desc: "Mempertemukan kompetensi siswa/alumni dengan kebutuhan industri.", icon: "handshake", iconImg: "/asset/icon/automation_40dp_FFFFFF_FILL1_wght400_GRAD0_opsz40 1.png" },
-  { id: 6, title: "Entrepreneurship", desc: "Pelatihan dan pendampingan bagi siswa yang ingin berwirausaha.", icon: "rocket", iconImg: "/asset/icon/source_environment_40dp_FFFFFF_FILL1_wght400_GRAD0_opsz40 1.png" }
+  { id: 1, title: "Career Guidance", desc: "Konsultasi dan bimbingan untuk menentukan arah karier.", icon: "guidance", iconImg: "/img/Container (7).png" },
+  { id: 2, title: "CV & Portfolio", desc: "Membantu siswa membuat CV dan portfolio yang profesional.", icon: "document", iconImg: "/img/Container (6).png" },
+  { id: 3, title: "Interview Preparation", desc: "Simulasi interview dan persiapan menghadapi proses rekrutmen.", icon: "microphone", iconImg: "/img/Container (5).png" },
+  { id: 4, title: "Industrial Recruitment", desc: "Rekrutmen langsung dari perusahaan mitra.", icon: "building", iconImg: "/img/Container (8).png" },
+  { id: 5, title: "Job Matching", desc: "Mempertemukan kompetensi siswa/alumni dengan kebutuhan industri.", icon: "handshake", iconImg: "/img/Container (9).png" },
+  { id: 6, title: "Entrepreneurship", desc: "Pelatihan dan pendampingan bagi siswa yang ingin berwirausaha.", icon: "rocket", iconImg: "/img/Container (10).png" }
 ];
 
 
@@ -448,7 +448,7 @@ export const careerArticles = [
     category: "Interview",
     title: "Cara menjawab 'Ceritakan tentang diri anda' saat interview",
     excerpt: "Teknik menjawab pertanyaan pembuka interview dengan percaya diri dan lugas.",
-    image: "/img/MP.jpeg",
+    image: "/img/LP.jpeg",
     content: "Gunakan metode STAR untuk menceritakan latar belakang vokasi Anda, proyek yang pernah Anda kerjakan di sekolah atau PKL, serta komitmen Anda untuk berkembang bersama perusahaan mitra."
   },
   {
@@ -456,7 +456,7 @@ export const careerArticles = [
     category: "Industry Insights",
     title: "Skill yang Banyak Dicari Industri pada Lulusan SMK",
     excerpt: "Daftar kompetensi teknis dan soft skills yang paling dibutuhkan dunia kerja saat ini.",
-    image: "/img/TKJ.jpeg",
+    image: "/img/DKV.jpeg",
     content: "Selain kemampuan teknis sesuai bidang keahlian, sikap kerja positif, integritas, kedisiplinan, dan kemampuan komunikasi menjadi poin penentu utama dalam seleksi rekrutmen industri."
   },
   {
@@ -464,7 +464,7 @@ export const careerArticles = [
     category: "Education",
     title: "Setelah SMK: Kerja, Kuliah, atau Wirausaha?",
     excerpt: "Panduan memilih jalur masa depan yang paling sesuai dengan minat dan potensimu.",
-    image: "/img/BD.jpeg",
+    image: "/img/MP.jpeg",
     content: "Tentukan pilihan berdasarkan cita-cita dan situasi Anda. Setiap jalur (Bekerja, Kuliah, atau Wirausaha) menawarkan jalan menuju kesuksesan jika dijalani dengan tekun."
   },
   {
