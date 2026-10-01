@@ -2097,21 +2097,7 @@
   text-decoration: underline;
 }
 
-/* 6th Slot - Big Orange Segmented Directional Arrow (Image 1) */
-.insight-arrow-illustration-slot {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
 
-.insight-big-arrow-img {
-  max-width: 190px;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 6px 18px rgba(255, 119, 0, 0.35));
-  animation: subtlePulse 3s ease-in-out infinite;
-}
 
 @media (max-width: 960px) {
   .insight-5cards-grid {
@@ -2235,13 +2221,6 @@
   object-fit: contain;
 }
 
-.testi-verified-seal-img {
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 6px rgba(255, 119, 0, 0.3));
-  animation: subtlePulse 3.5s ease-in-out infinite;
-}
 
 /* Icon micro-animations for Path & Program cards */
 .path-icon-img,

@@ -480,7 +480,7 @@ export const careerArticles = [
     category: "Career Strategy",
     title: "Strategi Sukses Menembus Seleksi Kerja di Perusahaan Mitra",
     excerpt: "Tips praktis mempersiapkan diri menghadapi tes kompetensi dan psikotes industri.",
-    image: "/img/DKV.jpeg",
+    image: "/img/TKJ.jpeg",
     content: "Persiapkan pemahaman dasar industri, jaga stamina fisik, dan pelajari budaya perusahaan yang Anda lamar untuk memberikan kesan terbaik selama rangkaian seleksi."
   }
 ];

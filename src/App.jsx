@@ -209,7 +209,6 @@ export default function App() {
   const [selectedLocation, setSelectedLocation] = useState('ALL');
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [showAllJobs, setShowAllJobs] = useState(false);
-  const [showAllArticles, setShowAllArticles] = useState(false);
   const [selectedJobModal, setSelectedJobModal] = useState(null);
 
   // Testimonial Carousel State
@@ -831,14 +830,7 @@ export default function App() {
                         </div>
                       </div>
 
-                      {/* Scalloped Verified Seal Badge with Checkmark (Gambar 2) */}
-                      <div className="testi-verified-seal" title="Alumni Terverifikasi">
-                        <img
-                          src="/img/rosette-discount-check 1.png"
-                          alt="Terverifikasi"
-                          className="testi-verified-seal-img"
-                        />
-                      </div>
+    
                     </div>
 
                     <p className="testi-quote-p">
@@ -1075,9 +1067,9 @@ export default function App() {
             </p>
           </div>
 
-          {/* 5 Cards + 1 Large Arrow Illustration Grid (Image 1) */}
+          {/* 6 Cards Grid (3x2) */}
           <div className="insight-5cards-grid">
-            {(showAllArticles ? careerArticles : careerArticles.slice(0, 5)).map((art) => (
+            {careerArticles.map((art) => (
               <div key={art.id} className="insight-card-exact">
                 <div className="insight-photo-box">
                   <img src={art.image} alt={art.title} className="insight-photo-img" />
@@ -1097,25 +1089,6 @@ export default function App() {
                 </div>
               </div>
             ))}
-
-            {/* 6th Slot - Big Orange Segmented Directional Arrow PNG (Image 1) */}
-            {!showAllArticles && <div className="insight-arrow-illustration-slot">
-              <img
-                src="/img/arrow-big-right-lines 1.png"
-                alt="Arah Karier"
-                className="insight-big-arrow-img"
-              />
-            </div>}
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: '36px' }}>
-            <button
-              type="button"
-              className="btn-see-all-jobs-orange"
-              onClick={() => setShowAllArticles(!showAllArticles)}
-            >
-              {showAllArticles ? 'Tampilkan Lebih Sedikit' : 'Lihat Semua Artikel'}
-            </button>
           </div>
         </div>
       </section>
