@@ -165,12 +165,96 @@ export const jobsData = [
 ];
 
 export const careerCenterPrograms = [
-  { id: 1, title: "Career Guidance", desc: "Konsultasi dan bimbingan untuk menentukan arah karier.", icon: "guidance", iconImg: "/img/Container (7).png" },
-  { id: 2, title: "CV & Portfolio", desc: "Membantu siswa membuat CV dan portfolio yang profesional.", icon: "document", iconImg: "/img/Container (6).png" },
-  { id: 3, title: "Interview Preparation", desc: "Simulasi interview dan persiapan menghadapi proses rekrutmen.", icon: "microphone", iconImg: "/img/Container (5).png" },
-  { id: 4, title: "Industrial Recruitment", desc: "Rekrutmen langsung dari perusahaan mitra.", icon: "building", iconImg: "/img/Container (8).png" },
-  { id: 5, title: "Job Matching", desc: "Mempertemukan kompetensi siswa/alumni dengan kebutuhan industri.", icon: "handshake", iconImg: "/img/Container (9).png" },
-  { id: 6, title: "Entrepreneurship", desc: "Pelatihan dan pendampingan bagi siswa yang ingin berwirausaha.", icon: "rocket", iconImg: "/img/Container (10).png" }
+  {
+    id: 1,
+    title: "Career Guidance",
+    subtitle: "Layanan Konsultasi & Bimbingan Arah Karir",
+    desc: "Konsultasi dan bimbingan untuk menentukan arah karier.",
+    details: "Program bimbingan karir individual dan kelompok yang dipandu oleh konselor profesional dan guru BK/BKK. Siswa didampingi secara intensif dalam mengenali potensi, minat, dan bakat untuk merencanakan kelulusan yang terarah (Bekerja, Melanjutkan Kuliah, atau Wirausaha).",
+    highlights: [
+      "Asesmen minat, bakat, dan pemetaan potensi kerja siswa",
+      "Konsultasi 1-on-1 perencanaan karir bersama tim BKK",
+      "Bimbingan pemilihan jurusan kuliah atau bidang kerja yang linier",
+      "Webinar & seminar karir berkala bersama praktisi industri"
+    ],
+    icon: "guidance",
+    iconImg: "/img/Container (7).png"
+  },
+  {
+    id: 2,
+    title: "CV & Portfolio",
+    subtitle: "Klinik Pembuatan CV & Portofolio Profesional",
+    desc: "Membantu siswa membuat CV dan portfolio yang profesional.",
+    details: "Pendampingan teknis dalam merancang Curriculum Vitae berstandar ATS (Applicant Tracking System) dan kurasi portofolio karya digital sesuai standar industri terkini, sehingga meningkatkan daya saing di mata recruiter.",
+    highlights: [
+      "Review dan bedah CV personal secara mendalam",
+      "Kurasi dan dokumentasi karya proyek unggulan siswa SMK",
+      "Panduan pembuatan profil LinkedIn & platform portofolio online",
+      "Template CV modern siap pakai untuk berbagai kompetensi keahlian"
+    ],
+    icon: "document",
+    iconImg: "/img/Container (6).png"
+  },
+  {
+    id: 3,
+    title: "Interview Preparation",
+    subtitle: "Simulasi & Pelatihan Wawancara Kerja",
+    desc: "Simulasi interview dan persiapan menghadapi proses rekrutmen.",
+    details: "Pelatihan komprehensif menghadapi berbagai tahapan wawancara kerja, mulai dari HR interview, user interview teknis, hingga Focus Group Discussion (FGD). Dilengkapi tips etika profesional dan psikotes industri.",
+    highlights: [
+      "Mock interview (simulasi wawancara) bersama praktisi HRD",
+      "Penguasaan teknik komunikasi STAR (Situation, Task, Action, Result)",
+      "Pelatihan bahasa tubuh, etika profesional, dan penampilan",
+      "Pembahasan contoh soal psikotes dan tips menjawab pertanyaan krusial"
+    ],
+    icon: "microphone",
+    iconImg: "/img/Container (5).png"
+  },
+  {
+    id: 4,
+    title: "Industrial Recruitment",
+    subtitle: "Rekrutmen Langsung Bersama Perusahaan Mitra",
+    desc: "Rekrutmen langsung dari perusahaan mitra.",
+    details: "Fasilitasi proses rekrutmen kerja dan magang yang diselenggarakan langsung di lingkungan sekolah (On-Campus Recruitment) bekerjasama dengan puluhan mitra industri skala regional hingga multinasional.",
+    highlights: [
+      "Pelaksanaan kampus rekrutmen langsung di SMKN 1 Bondowoso",
+      "Akses prioritas seleksi berkas bagi lulusan SMKN 1 Bondowoso",
+      "Ujian kompetensi teknis dan psikotes terstandar industri",
+      "Proses penyaluran kerja transparan, terverifikasi, dan aman"
+    ],
+    icon: "building",
+    iconImg: "/img/Container (8).png"
+  },
+  {
+    id: 5,
+    title: "Job Matching",
+    subtitle: "Penyelarasan Kompetensi Siswa & Kebutuhan Industri",
+    desc: "Mempertemukan kompetensi siswa/alumni dengan kebutuhan industri.",
+    details: "Sistem cerdas yang memetakan kualifikasi keahlian, sertifikasi kompetensi, dan domisili alumni dengan kriteria lowongan kerja yang dibuka oleh perusahaan mitra, memastikan tingkat kesesuaian penempatan kerja yang tinggi.",
+    highlights: [
+      "Penjodohan otomatis profil alumni dengan lowongan yang relevan",
+      "Database talent pool terintegrasi per bidang keahlian",
+      "Informasi lowongan eksklusif dari jaringan industri mitra BKK",
+      "Rekomendasi kandidat unggulan langsung ke HR recruiter mitra"
+    ],
+    icon: "handshake",
+    iconImg: "/img/Container (9).png"
+  },
+  {
+    id: 6,
+    title: "Entrepreneurship",
+    subtitle: "Inkubasi & Pendampingan Wirausaha Muda",
+    desc: "Pelatihan dan pendampingan bagi siswa yang ingin berwirausaha.",
+    details: "Program inkubator bisnis dan kewirausahaan untuk siswa dan alumni yang bertekad membuka usaha mandiri, mulai dari validasi ide produk, legalitas usaha, hingga strategi pemasaran digital.",
+    highlights: [
+      "Mentoring bisnis intensif bersama wirausahawan sukses",
+      "Pelatihan digital marketing, branding, dan manajemen keuangan",
+      "Pendampingan perizinan usaha (NIB, sertifikasi halal, dsb.)",
+      "Akses pameran produk inovasi siswa & jejaring bisnis alumni"
+    ],
+    icon: "rocket",
+    iconImg: "/img/Container (10).png"
+  }
 ];
 
 

@@ -219,6 +219,7 @@ export default function App() {
   const [showAgendaModal, setShowAgendaModal] = useState(null);
   const [showMitraModal, setShowMitraModal] = useState(false);
   const [selectedArticleModal, setSelectedArticleModal] = useState(null);
+  const [selectedProgramModal, setSelectedProgramModal] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   // Form States
@@ -690,12 +691,28 @@ export default function App() {
 
           <div className="career-center-grid-6">
             {careerCenterPrograms.map((prog) => (
-              <div key={prog.id} className="cc-card-item">
+              <div
+                key={prog.id}
+                className="cc-card-item"
+                role="button"
+                tabIndex={0}
+                onClick={() => setSelectedProgramModal(prog)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setSelectedProgramModal(prog);
+                  }
+                }}
+              >
                 <div className="cc-card-icon-box">
                   <img src={prog.iconImg} alt={prog.title} className="cc-card-icon-img" />
                 </div>
                 <h3 className="cc-card-title">{prog.title}</h3>
                 <p className="cc-card-desc">{prog.desc}</p>
+                <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '6px', color: '#ff6600', fontSize: '0.82rem', fontWeight: 700 }}>
+                  <span>Pelajari Selengkapnya</span>
+                  <span>→</span>
+                </div>
               </div>
             ))}
           </div>
@@ -1666,6 +1683,113 @@ export default function App() {
               <p style={{ fontSize: '0.92rem', color: '#334155', lineHeight: 1.7 }}>
                 {selectedArticleModal.content}
               </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Program Career Center Detail Modal */}
+      {selectedProgramModal && (
+        <div className="modal-backdrop-overlay" onClick={() => setSelectedProgramModal(null)}>
+          <div className="modal-dialog-box" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '580px' }}>
+            <div className="modal-header-styled">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div
+                  style={{
+                    width: '46px',
+                    height: '46px',
+                    borderRadius: '12px',
+                    background: '#ff6600',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0
+                  }}
+                >
+                  <img
+                    src={selectedProgramModal.iconImg}
+                    alt={selectedProgramModal.title}
+                    style={{ width: '28px', height: '28px', objectFit: 'contain' }}
+                  />
+                </div>
+                <div>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#ff6600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Program Career Center
+                  </span>
+                  <h3 className="modal-title-custom" style={{ margin: 0, fontSize: '1.25rem' }}>
+                    {selectedProgramModal.title}
+                  </h3>
+                </div>
+              </div>
+              <button
+                type="button"
+                className="modal-close-btn-x"
+                onClick={() => setSelectedProgramModal(null)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="modal-body-content">
+              {selectedProgramModal.subtitle && (
+                <div style={{ fontWeight: 700, fontSize: '0.96rem', color: '#0f172a', marginBottom: '8px' }}>
+                  {selectedProgramModal.subtitle}
+                </div>
+              )}
+
+              <p style={{ fontSize: '0.92rem', color: '#475569', lineHeight: 1.6, marginBottom: '18px' }}>
+                {selectedProgramModal.details || selectedProgramModal.desc}
+              </p>
+
+              {selectedProgramModal.highlights && selectedProgramModal.highlights.length > 0 && (
+                <div
+                  style={{
+                    background: '#f8fafc',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '12px',
+                    padding: '16px 20px',
+                    marginBottom: '22px'
+                  }}
+                >
+                  <h4 style={{ fontSize: '0.9rem', fontWeight: 800, color: '#0f172a', marginBottom: '10px' }}>
+                    Layanan & Manfaat Program:
+                  </h4>
+                  <ul
+                    style={{
+                      paddingLeft: '18px',
+                      margin: 0,
+                      fontSize: '0.88rem',
+                      color: '#475569',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '8px'
+                    }}
+                  >
+                    {selectedProgramModal.highlights.map((h, i) => (
+                      <li key={i}>{h}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <button
+                  type="button"
+                  style={{
+                    padding: '9px 24px',
+                    borderRadius: '8px',
+                    border: '1px solid #cbd5e1',
+                    fontWeight: 700,
+                    background: '#ffffff',
+                    color: '#334155',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                  onClick={() => setSelectedProgramModal(null)}
+                >
+                  Tutup
+                </button>
+              </div>
             </div>
           </div>
         </div>
