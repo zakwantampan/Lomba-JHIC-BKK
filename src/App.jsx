@@ -216,7 +216,6 @@ export default function App() {
 
   // Modals
   const [showTracerModal, setShowTracerModal] = useState(false);
-  const [showAgendaModal, setShowAgendaModal] = useState(null);
   const [showMitraModal, setShowMitraModal] = useState(false);
   const [selectedArticleModal, setSelectedArticleModal] = useState(null);
   const [selectedProgramModal, setSelectedProgramModal] = useState(null);
@@ -230,13 +229,6 @@ export default function App() {
     status: 'Bekerja',
     place: '',
     feedback: ''
-  });
-
-  const [agendaForm, setAgendaForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    nisn: ''
   });
 
   const [loginForm, setLoginForm] = useState({
@@ -313,12 +305,6 @@ export default function App() {
     });
   };
 
-  const submitAgendaForm = (e) => {
-    e.preventDefault();
-    setShowAgendaModal(null);
-    triggerToast(`Pendaftaran Anda untuk kegiatan ${showAgendaModal?.title || 'Agenda'} berhasil! Tiket digital telah dikirim.`);
-    setAgendaForm({ name: '', email: '', phone: '', nisn: '' });
-  };
 
   const submitJobApplication = (job) => {
     setSelectedJobModal(null);
@@ -1013,7 +999,6 @@ export default function App() {
               <button
                 type="button"
                 className="agenda-btn-featured-white"
-                onClick={() => setShowAgendaModal(featuredAgenda)}
               >
                 <span>Daftar Sekarang</span>
                 <span className="agenda-btn-arrow">→</span>
@@ -1026,9 +1011,6 @@ export default function App() {
                 <div
                   key={ag.id}
                   className="agenda-mini-card-white"
-                  onClick={() => setShowAgendaModal(ag)}
-                  role="button"
-                  tabIndex={0}
                 >
                   <div className="agenda-mini-icon-orange">
                     <img
@@ -1530,76 +1512,7 @@ export default function App() {
         </div>
       )}
 
-      {/* Agenda Modal */}
-      {showAgendaModal && (
-        <div className="modal-backdrop-overlay" onClick={() => setShowAgendaModal(null)}>
-          <div className="modal-dialog-box" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header-styled">
-              <h3 className="modal-title-custom">Pendaftaran {showAgendaModal.title}</h3>
-              <button
-                type="button"
-                className="modal-close-btn-x"
-                onClick={() => setShowAgendaModal(null)}
-              >
-                ✕
-              </button>
-            </div>
 
-            <form onSubmit={submitAgendaForm} className="modal-body-content">
-              <div className="filter-field-block">
-                <label className="filter-field-label">Nama Lengkap</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Nama Anda..."
-                  className="filter-input-styled"
-                  value={agendaForm.name}
-                  onChange={(e) => setAgendaForm({ ...agendaForm, name: e.target.value })}
-                />
-              </div>
-              <div className="filter-field-block">
-                <label className="filter-field-label">Email</label>
-                <input
-                  type="email"
-                  required
-                  placeholder="email@domain.com..."
-                  className="filter-input-styled"
-                  value={agendaForm.email}
-                  onChange={(e) => setAgendaForm({ ...agendaForm, email: e.target.value })}
-                />
-              </div>
-              <div className="filter-field-block">
-                <label className="filter-field-label">Nomor WhatsApp</label>
-                <input
-                  type="tel"
-                  required
-                  placeholder="08123456789..."
-                  className="filter-input-styled"
-                  value={agendaForm.phone}
-                  onChange={(e) => setAgendaForm({ ...agendaForm, phone: e.target.value })}
-                />
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '16px' }}>
-                <button
-                  type="button"
-                  style={{ padding: '8px 18px', borderRadius: '6px', border: '1px solid #cbd5e1', fontWeight: 700 }}
-                  onClick={() => setShowAgendaModal(null)}
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  className="btn-see-all-jobs-orange"
-                  style={{ margin: 0, padding: '8px 20px', fontSize: '0.88rem' }}
-                >
-                  Konfirmasi Daftar
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* Mitra All Modal */}
       {showMitraModal && (
