@@ -27,19 +27,29 @@ import {
 
 function PartnerLogo({ logoUrl, type, name, className = '', style = {}, loading = 'lazy' }) {
   if (logoUrl) {
+    const isWideNarrowLogo = logoUrl.includes('logo5') || logoUrl.includes('logo6');
     return (
       <img
         src={logoUrl}
         alt={name}
-        className={`partner-img-logo ${className}`}
-        style={{ maxHeight: '72px', maxWidth: '210px', width: 'auto', objectFit: 'contain', ...style }}
+        className={`partner-img-logo ${isWideNarrowLogo ? 'partner-logo-scale-boost' : ''} ${className}`}
+        style={{
+          maxHeight: isWideNarrowLogo ? '150px' : '100px',
+          maxWidth: isWideNarrowLogo ? '360px' : '280px',
+          transform: isWideNarrowLogo ? 'scale(1.9)' : undefined,
+          transformOrigin: 'center center',
+          width: 'auto',
+          height: 'auto',
+          objectFit: 'contain',
+          ...style
+        }}
         loading={loading}
       />
     );
   }
   if (type === 'lumoish') {
     return (
-      <svg viewBox="0 0 160 50" className={`partner-svg-logo ${className}`} style={{ height: '52px', width: 'auto', ...style }} aria-label={name}>
+      <svg viewBox="0 0 160 50" className={`partner-svg-logo ${className}`} style={{ height: '70px', width: 'auto', ...style }} aria-label={name}>
         <text x="50%" y="58%" dominantBaseline="middle" textAnchor="middle" fontFamily="'Playfair Display', 'Georgia', serif" fontSize="21" fontWeight="600" letterSpacing="4" fill="#1e293b">LUMOISH</text>
         <line x1="32" y1="38" x2="128" y2="38" stroke="#1e293b" strokeWidth="0.8"/>
       </svg>
@@ -47,7 +57,7 @@ function PartnerLogo({ logoUrl, type, name, className = '', style = {}, loading 
   }
   if (type === 'dpkp') {
     return (
-      <svg viewBox="0 0 240 60" className={`partner-svg-logo ${className}`} style={{ height: '54px', width: 'auto', ...style }} aria-label={name}>
+      <svg viewBox="0 0 240 60" className={`partner-svg-logo ${className}`} style={{ height: '72px', width: 'auto', ...style }} aria-label={name}>
         <path d="M 45 10 L 225 10 Q 235 10 235 25 L 235 35 Q 235 50 225 50 L 45 50 Z" fill="#F4D03F" stroke="#111827" strokeWidth="2.5" strokeLinejoin="round"/>
         <g transform="translate(14, 6) scale(0.8)">
           <path d="M 25 5 Q 45 5 45 32 Q 45 54 25 58 Q 5 54 5 32 Q 5 5 25 5 Z" fill="#22c55e" stroke="#111827" strokeWidth="2.5"/>
@@ -62,7 +72,7 @@ function PartnerLogo({ logoUrl, type, name, className = '', style = {}, loading 
   }
   if (type === 'hummatech') {
     return (
-      <svg viewBox="0 0 160 60" className={`partner-svg-logo ${className}`} style={{ height: '54px', width: 'auto', ...style }} aria-label={name}>
+      <svg viewBox="0 0 160 60" className={`partner-svg-logo ${className}`} style={{ height: '72px', width: 'auto', ...style }} aria-label={name}>
         <circle cx="80" cy="20" r="15" fill="none" stroke="#0ea5e9" strokeWidth="2.8"/>
         <path d="M 72 24 L 72 18 L 80 12 L 88 18 L 88 24" fill="none" stroke="#0ea5e9" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M 76 24 L 76 19 L 84 19 L 84 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinejoin="round"/>
@@ -73,7 +83,7 @@ function PartnerLogo({ logoUrl, type, name, className = '', style = {}, loading 
   }
   if (type === 'accurate') {
     return (
-      <svg viewBox="0 0 160 60" className={`partner-svg-logo ${className}`} style={{ height: '54px', width: 'auto', ...style }} aria-label={name}>
+      <svg viewBox="0 0 160 60" className={`partner-svg-logo ${className}`} style={{ height: '72px', width: 'auto', ...style }} aria-label={name}>
         <g transform="translate(68, 6)">
           <path d="M 12 2 L 1 20 C -0.5 23 2.5 25 5.5 22.5 L 12 17 L 18.5 22.5 C 21.5 25 24.5 23 23 20 Z" fill="#d92058"/>
           <polygon points="12,7 6,17 12,14 18,17" fill="#ffffff" opacity="0.25"/>
@@ -84,7 +94,7 @@ function PartnerLogo({ logoUrl, type, name, className = '', style = {}, loading 
   }
   if (type === 'telkom') {
     return (
-      <svg viewBox="0 0 190 60" className={`partner-svg-logo ${className}`} style={{ height: '54px', width: 'auto', ...style }} aria-label={name}>
+      <svg viewBox="0 0 190 60" className={`partner-svg-logo ${className}`} style={{ height: '72px', width: 'auto', ...style }} aria-label={name}>
         <g transform="translate(130, 8)">
           <path d="M 18 12 C 24 12 30 18 30 25 C 30 32 24 38 18 38 C 12 38 6 32 6 25" fill="none" stroke="#dc2626" strokeWidth="3.5" strokeLinecap="round"/>
           <path d="M 7 14 C 11 8 18 5 25 7" fill="none" stroke="#dc2626" strokeWidth="3.5" strokeLinecap="round"/>
@@ -99,7 +109,7 @@ function PartnerLogo({ logoUrl, type, name, className = '', style = {}, loading 
   }
   if (type === 'metrotv') {
     return (
-      <svg viewBox="0 0 210 60" className={`partner-svg-logo ${className}`} style={{ height: '54px', width: 'auto', ...style }} aria-label={name}>
+      <svg viewBox="0 0 210 60" className={`partner-svg-logo ${className}`} style={{ height: '72px', width: 'auto', ...style }} aria-label={name}>
         <text x="10" y="33" fontFamily="'Impact', 'Arial Black', sans-serif" fontSize="24" fontWeight="900" fill="#0c2340" letterSpacing="0.5">METR</text>
         <g transform="translate(86, 12)">
           <circle cx="14" cy="14" r="14" fill="#0c2340"/>
@@ -112,7 +122,7 @@ function PartnerLogo({ logoUrl, type, name, className = '', style = {}, loading 
       </svg>
     );
   }
-  return <span style={{ fontWeight: 700, color: '#1e293b', fontSize: '1.1rem' }}>{name}</span>;
+  return <span style={{ fontWeight: 700, color: '#1e293b', fontSize: '1.25rem' }}>{name}</span>;
 }
 
 function DonutChartSweep({ id, slices, size = 180, strokeWidth = 34 }) {
@@ -400,6 +410,18 @@ export default function App() {
                 {link.label}
               </a>
             ))}
+            <div className="mobile-drawer-login-wrap">
+              <button
+                type="button"
+                className="btn-login-orange mobile-drawer-login-btn"
+                onClick={() => {
+                  setShowLoginModal(true);
+                  setMobileMenuOpen(false);
+                }}
+              >
+                Login
+              </button>
+            </div>
           </div>
         )}
       </header>
@@ -821,10 +843,11 @@ export default function App() {
                     <div className="testi-header-row-exact">
                       <div className="testi-user-badge">
                         <div className="testi-avatar-icon">
-                          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                            <circle cx="12" cy="7" r="4" />
-                          </svg>
+                          <img
+                            src="https://static.everypixel.com/ep-pixabay/0329/8099/0858/84037/3298099085884037069-head.png"
+                            alt={cur.name}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%', display: 'block' }}
+                          />
                         </div>
                         <div>
                           <h4 className="testi-author-name">{cur.name}</h4>

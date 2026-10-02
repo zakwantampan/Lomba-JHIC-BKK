@@ -18,8 +18,7 @@ section[id] {
 }
 
 :focus-visible {
-  outline:3px solid #147d98;
-  outline-offset:4px
+  outline: none;
 }
 
 .navbar-container {
@@ -214,8 +213,8 @@ section[id] {
 .job-card-white {
   padding:24px;
   border-radius:16px;
-  border-color:#cfd2da;
-  box-shadow:0 2px 3px #0001
+  border:none;
+  box-shadow:0 2px 8px #0001
 }
 
 .job-role-text {
@@ -319,8 +318,8 @@ section[id] {
 .path-card-white {
   padding:32px;
   min-height:258px;
-  border-color:#cfd2da;
-  box-shadow:0 2px 3px #0001
+  border:1.5px solid #e2e8f0;
+  box-shadow:0 2px 8px #0001
 }
 
 .path-icon-orange-square,.cc-card-icon-box {
@@ -368,8 +367,8 @@ section[id] {
 .cc-card-item {
   padding:32px;
   min-height:228px;
-  border-color:#cfd2da;
-  box-shadow:0 2px 3px #0001
+  border:none;
+  box-shadow:0 2px 8px #0001
 }
 
 .cc-card-icon-img {
@@ -378,8 +377,7 @@ section[id] {
 }
 
 .cc-briefcase-deco-img {
-  width:140px;
-  filter:drop-shadow(3px 4px 2px #0003)
+  width:140px
 }
 
 .cc-briefcase-deco {
@@ -491,8 +489,8 @@ section[id] {
 .testimonial-card-slide14 {
   padding:40px 32px 20px;
   border-radius:16px;
-  border-color:#aaa;
-  box-shadow:none
+  border:none;
+  box-shadow:0 2px 8px #0001
 }
 
 .testi-avatar-icon {
@@ -602,7 +600,8 @@ section[id] {
 .tracer-bars-card {
   border-radius:6px;
   padding:32px;
-  border-color:#cfd2da
+  border:1.5px solid #e2e8f0;
+  box-shadow:0 2px 8px #0001
 }
 
 .tracer-bar-item {
@@ -715,7 +714,8 @@ section[id] {
 .agenda-mini-card-white {
   border-radius:6px;
   padding:16px;
-  border-color:#cfd2da;
+  border:none;
+  box-shadow:0 2px 8px #0001;
   gap:16px
 }
 
@@ -728,17 +728,19 @@ section[id] {
 
 .agenda-mini-card-title {
   font-size:16px;
+  font-weight:800;
   color:#183958
 }
 
 .agenda-mini-card-meta {
-  font-size:12px
+  font-size:13px;
+  font-weight:700;
+  color:#475569
 }
 
 .agenda-deco-cal-img {
   width:128px;
-  height:128px;
-  filter:drop-shadow(3px 4px 2px #0003)
+  height:128px
 }
 
 .agenda-deco-topright-cal {
@@ -804,7 +806,8 @@ section[id] {
 }
 
 .insight-card-exact {
-  box-shadow:4px 8px 10px #0003
+  border:none;
+  box-shadow:0 4px 12px rgba(0,0,0,0.06)
 }
 
 .insight-category-pill {
@@ -819,8 +822,7 @@ section[id] {
 
 .insight-topright-compass-img {
   width:134px;
-  height:134px;
-  filter:drop-shadow(3px 4px 2px #0003)
+  height:134px
 }
 
 .insight-topright-compass {
@@ -1261,12 +1263,21 @@ section[id] {
   .brand-tagline {
     font-size:8px
   }
-  .btn-login-orange {
-    padding:8px 16px;
-    font-size:13px
+  .nav-actions .btn-login-orange {
+    display:none
   }
-  .nav-actions {
-    gap:4px
+  .mobile-drawer-login-wrap {
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px solid #f1f5f9
+  }
+  .mobile-drawer-login-btn {
+    display:flex;
+    width:100%;
+    justify-content:center;
+    padding:12px 16px;
+    font-size:14px;
+    font-weight:700
   }
   .mobile-nav-drawer {
     top:70px
