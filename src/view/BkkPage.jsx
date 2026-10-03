@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { apiFetch } from "../lib/api";
 import "../App.css";
 import "../prototype.css";
 import "../motion.css";
@@ -11,7 +12,6 @@ import {
   navLinks,
   heroStats,
   careerPaths,
-  jobsData,
   careerCenterPrograms,
   testimonialsData,
   careerJourneySteps,
@@ -19,8 +19,6 @@ import {
   featuredAgenda,
   upcomingAgendas,
   industryPartners,
-  absorptionDonuts,
-  yearlyAbsorptionChart,
   careerArticles,
   recapMetrics,
 } from "../data/bkkData";
@@ -491,6 +489,267 @@ export default function HalamanBkk() {
   usePageReveal();
   useChartMotion();
 
+  // ---- Lowongan BKK asli, gantikan jobsData dummy ----
+  // CATATAN: field `major`, `location`, `edu`, `isNew` dipakai di UI tapi
+  // TIDAK ADA di tabel bkk_lowongans (BkkController) — field itu cuma ada
+  // di data dummy lama. Supaya UI tidak error, field itu diisi fallback
+  // (lihat di bawah) sampai backend-nya ditambah kolomnya kalau memang
+  // mau filter per jurusan/lokasi beneran berfungsi.
+  const [realJobs, setRealJobs] = useState([]);
+  const [jobsLoading, setJobsLoading] = useState(true);
+
+  useEffect(() => {
+    // "/bkk" (tanpa "/public") butuh login + permission admin — endpoint
+    // ini sengaja dipisah supaya pengunjung publik yang belum login tetap
+    // bisa lihat lowongan approved tanpa kena 401.
+    apiFetch("/bkk/public")
+      .then((data) => {
+        const list = Array.isArray(data) ? data : data?.data || [];
+        setRealJobs(
+          list.map((item) => ({
+            id: item.id,
+            title: item.posisi_dibutuhkan,
+            company: item.nama_perusahaan,
+            majorLabel: item.posisi_dibutuhkan,
+            major: "ALL", // belum ada kolom jurusan di backend, filter jurusan dinonaktifkan
+            location: item.alamat_perusahaan || "-",
+            type: item.tipe_pekerjaan,
+            edu: "-", // belum ada kolom pendidikan minimal di backend
+            deadline: item.batas_lamar
+              ? new Date(item.batas_lamar).toLocaleDateString("id-ID", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })
+              : "-",
+            description: item.deskripsi_perusahaan || item.kualifikasi,
+            requirements: (item.kualifikasi || "")
+              .split("\n")
+              .map((s) => s.trim())
+              .filter(Boolean),
+            isNew:
+              item.created_at &&
+              Date.now() - new Date(item.created_at).getTime() <
+                7 * 24 * 60 * 60 * 1000,
+          })),
+        );
+      })
+      .catch(() => setRealJobs([]))
+      .finally(() => setJobsLoading(false));
+  }, []);
+
+  // ---- Statistik lulusan asli, gantikan angka hardcode di 2 donut chart ----
+  const [lulusanStats, setLulusanStats] = useState(null);
+
+  useEffect(() => {
+    // "/lulusan/stats" (tanpa "/public") butuh login + permission —
+    // endpoint publik buat halaman ini ada di "/lulusan/stats/public"
+    // (lihat api.php), sama polanya kayak "/bkk/public" di atas.
+    apiFetch("/lulusan/stats/public")
+      .then(setLulusanStats)
+      .catch(() => setLulusanStats(null));
+  }, []);
+
+  // ---- Statistik asli buat panel "Tracer Study" (tracer-bars-card) ----
+  // Pakai data lulusanStats yang sama kayak di atas, jadi tidak perlu
+  // fetch baru. Label & warna bar tetap dari tracerStudyStats (desainnya
+  // tidak berubah), cuma angka persentasenya yang diganti jadi asli.
+  // Selama lulusanStats belum ada (loading/gagal), tampil data contoh
+  // dulu (tracerStudyStats.breakdown & "1.250") biar tidak kelihatan 0%.
+  const tracerBreakdown = useMemo(() => {
+    const t = lulusanStats?.total;
+    if (!t) return tracerStudyStats.breakdown;
+
+    // Pembagi HARUS 4 kategori (termasuk belum_kerja), sama persis kayak
+    // total yang dipakai donut chart (toDonutSlices) — biar persennya
+    // konsisten walau "Belum" sendiri tidak ditampilkan sebagai bar di sini.
+    const total =
+      (t.bekerja || 0) +
+      (t.kuliah || 0) +
+      (t.wirausaha || 0) +
+      (t.belum_kerja || 0);
+    const pctFor = (key) => {
+      const n = t[key] || 0;
+      return total > 0 ? Math.round((n / total) * 100) : 0;
+    };
+    const keyFor = (label = "") => {
+      const l = label.toLowerCase();
+      if (l.includes("bekerja")) return "bekerja";
+      if (l.includes("kuliah")) return "kuliah";
+      if (l.includes("wirausaha")) return "wirausaha";
+      return null;
+    };
+
+    return tracerStudyStats.breakdown.map((item) => {
+      const key = keyFor(item.label);
+      return key ? { ...item, percentage: pctFor(key) } : item;
+    });
+  }, [lulusanStats]);
+
+  const tracerTotalAlumni = useMemo(() => {
+    const t = lulusanStats?.total;
+    if (!t) return null;
+    return (
+      (t.bekerja || 0) +
+      (t.kuliah || 0) +
+      (t.wirausaha || 0) +
+      (t.belum_kerja || 0)
+    );
+  }, [lulusanStats]);
+
+  // ---- Statistik asli buat panel 5 angka di hero (heroStats) ----
+  // Alumni Terdata, Alumni Bekerja & Alumni Melanjutkan Studi dari
+  // lulusanStats (sama kayak di atas), Lowongan Aktif dari realJobs
+  // (sudah di-fetch di atas juga). "Mitra Industri" belum ada
+  // endpoint/tabel asli-nya, jadi sementara dihitung dari panjang
+  // array `industryPartners` yang ditampilkan di bagian "Mitra
+  // Industri" halaman ini — minimal bukan angka ngarang lagi.
+  // Item yang labelnya tidak cocok dengan salah satu di atas tetap
+  // pakai data contoh (tidak diubah).
+  const realHeroStats = useMemo(() => {
+    const t = lulusanStats?.total;
+    const fmt = (n) => n.toLocaleString("id-ID");
+
+    return heroStats.map((stat) => {
+      const label = (stat.label || "").toLowerCase();
+
+      if (label.includes("alumni terdata") && tracerTotalAlumni !== null) {
+        return { ...stat, value: `${fmt(tracerTotalAlumni)}+` };
+      }
+      if (label.includes("alumni bekerja") && t) {
+        return { ...stat, value: `${fmt(t.bekerja || 0)}+` };
+      }
+      if (label.includes("melanjutkan studi") && t) {
+        return { ...stat, value: `${fmt(t.kuliah || 0)}+` };
+      }
+      if (label.includes("lowongan aktif") && !jobsLoading) {
+        return { ...stat, value: `${realJobs.length}` };
+      }
+      if (label.includes("mitra industri")) {
+        return { ...stat, value: `${industryPartners.length}+` };
+      }
+      return stat;
+    });
+  }, [lulusanStats, tracerTotalAlumni, realJobs, jobsLoading]);
+
+  // Ubah { bekerja, wirausaha, kuliah, belum_kerja } jadi array slice %
+  // buat DonutChartSweep, dengan warna & urutan yang SAMA PERSIS seperti
+  // yang sebelumnya hardcode di JSX (jadi tampilannya tidak berubah,
+  // cuma angkanya yang sekarang asli).
+  function toDonutSlices(counts) {
+    const total =
+      (counts?.bekerja || 0) +
+      (counts?.kuliah || 0) +
+      (counts?.wirausaha || 0) +
+      (counts?.belum_kerja || 0);
+    if (!total) {
+      return [
+        { name: "Bekerja", pct: 0, color: "#ea580c" },
+        { name: "Kuliah", pct: 0, color: "#f59e0b" },
+        { name: "Wirausaha", pct: 0, color: "#eab308" },
+        { name: "Belum", pct: 0, color: "#f87171" },
+      ];
+    }
+    const pct = (n) => Math.round((n / total) * 10000) / 100; // 2 desimal
+    return [
+      { name: "Bekerja", pct: pct(counts.bekerja), color: "#ea580c" },
+      { name: "Kuliah", pct: pct(counts.kuliah), color: "#f59e0b" },
+      { name: "Wirausaha", pct: pct(counts.wirausaha), color: "#eab308" },
+      { name: "Belum", pct: pct(counts.belum_kerja), color: "#f87171" },
+    ];
+  }
+
+  const allTimeSlices = useMemo(
+    () => toDonutSlices(lulusanStats?.total),
+    [lulusanStats],
+  );
+
+  // Tahun terbaru yang BENERAN ada datanya — bukan di-hardcode "2026",
+  // karena data excel yang sudah diimpor (2022-2025) belum tentu punya
+  // baris tahun 2026. Kalau nanti file tahun 2026 diimpor, panel ini
+  // otomatis ikut pindah ke tahun itu tanpa perlu ubah kode lagi.
+  const latestYearRow = useMemo(() => {
+    const rows = lulusanStats?.per_tahun || [];
+    if (rows.length === 0) return null;
+    return rows.reduce((a, b) => (b.tahun > a.tahun ? b : a));
+  }, [lulusanStats]);
+
+  const latestYearSlices = useMemo(
+    () => toDonutSlices(latestYearRow),
+    [latestYearRow],
+  );
+
+  // Data buat bar chart "Jumlah Keterserapan Alumni per Tahun" — dibangun
+  // dari lulusanStats.per_tahun asli (bukan dari data/bkkData.js yang
+  // statis), jadi tahun & jumlahnya selalu ikut data yang benar-benar
+  // sudah diimpor.
+  const YEAR_COLORS = [
+    "#ef4444",
+    "#22c55e",
+    "#eab308",
+    "#06b6d4",
+    "#a855f7",
+    "#78350f",
+    "#f97316",
+    "#15803d",
+    "#facc15",
+    "#dc2626",
+    "#0ea5e9",
+    "#c026d3",
+    "#fb923c",
+    "#0284c7",
+    "#65a30d",
+    "#b91c1c",
+    "#4f46e5",
+    "#be185d",
+  ];
+  const yearlyChartData = useMemo(() => {
+    const rows = [...(lulusanStats?.per_tahun || [])].sort(
+      (a, b) => a.tahun - b.tahun,
+    );
+    if (rows.length === 0) {
+      return { years: [], columns: [], axisTicks: [100, 80, 60, 40, 20, 0] };
+    }
+
+    const yearColor = Object.fromEntries(
+      rows.map((r, i) => [r.tahun, YEAR_COLORS[i % YEAR_COLORS.length]]),
+    );
+
+    const categories = [
+      { id: "kuliah", label: "KULIAH" },
+      { id: "wirausaha", label: "WIRAUSAHA" },
+      { id: "belum_kerja", label: "BELUM" },
+      { id: "bekerja", label: "BEKERJA" },
+    ];
+
+    const categoryTotals = categories.map((cat) =>
+      rows.reduce((sum, r) => sum + (r[cat.id] || 0), 0),
+    );
+    const maxTotal = Math.max(...categoryTotals, 1);
+    // Bulatkan batas atas sumbu ke kelipatan 100 terdekat di atas nilai
+    // terbesar, supaya skalanya selalu masuk akal buat data berapa pun
+    // (bukan sumbu 1000 yang di-hardcode).
+    const axisMax = Math.max(100, Math.ceil(maxTotal / 100) * 100);
+
+    const columns = categories.map((cat, idx) => ({
+      category: cat.label,
+      heightPct: (categoryTotals[idx] / axisMax) * 100,
+      segments: rows
+        .filter((r) => (r[cat.id] || 0) > 0)
+        .map((r) => ({ h: r[cat.id], color: yearColor[r.tahun] })),
+    }));
+
+    const axisTicks = [1, 0.8, 0.6, 0.4, 0.2, 0].map((f) =>
+      Math.round(axisMax * f),
+    );
+
+    return {
+      years: rows.map((r) => ({ year: r.tahun, color: yearColor[r.tahun] })),
+      columns,
+      axisTicks,
+    };
+  }, [lulusanStats]);
+
   const triggerToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => {
@@ -499,7 +758,7 @@ export default function HalamanBkk() {
   };
 
   const filteredJobs = useMemo(() => {
-    return jobsData.filter((job) => {
+    return realJobs.filter((job) => {
       const matchSearch =
         job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         job.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -513,7 +772,7 @@ export default function HalamanBkk() {
 
       return matchSearch && matchMajor && matchLocation && matchType;
     });
-  }, [searchQuery, selectedMajor, selectedLocation, selectedTypes]);
+  }, [realJobs, searchQuery, selectedMajor, selectedLocation, selectedTypes]);
 
   const displayedJobs = showAllJobs ? filteredJobs : filteredJobs.slice(0, 2);
 
@@ -707,7 +966,7 @@ export default function HalamanBkk() {
 
         <div className="container hero-stats-panel-wrapper">
           <div className="hero-stats-panel-glass">
-            {heroStats.map((stat, idx) => (
+            {realHeroStats.map((stat, idx) => (
               <div key={idx} className="stat-item-box">
                 <span className="stat-num-value">
                   <CountUp value={stat.value} duration={2200 + idx * 150} />
@@ -841,7 +1100,12 @@ export default function HalamanBkk() {
               }}
             >
               <div className="jobs-grid-2col" style={{ width: "100%" }}>
-                {displayedJobs.length === 0 && (
+                {jobsLoading && (
+                  <p className="jobs-empty" role="status">
+                    Memuat lowongan...
+                  </p>
+                )}
+                {!jobsLoading && displayedJobs.length === 0 && (
                   <p className="jobs-empty" role="status">
                     Belum ada lowongan yang sesuai. Coba kata kunci atau filter
                     lain.
@@ -1326,7 +1590,7 @@ export default function HalamanBkk() {
 
           <div className="tracer-2col-layout">
             <div className="tracer-bars-card">
-              {tracerStudyStats.breakdown.map((item, idx) => (
+              {tracerBreakdown.map((item, idx) => (
                 <div key={idx} className="tracer-bar-item">
                   <div className="tracer-bar-labels">
                     <span className="tracer-bar-label-name">{item.label}</span>
@@ -1359,7 +1623,11 @@ export default function HalamanBkk() {
                 }}
               >
                 <div className="tracer-total-number">
-                  <span>1.250</span>
+                  <span>
+                    {tracerTotalAlumni !== null
+                      ? tracerTotalAlumni.toLocaleString("id-ID")
+                      : "1.250"}
+                  </span>
                 </div>
                 <div
                   style={{
@@ -1555,19 +1823,11 @@ export default function HalamanBkk() {
             <div className="donuts-side-by-side-grid">
               <div className="donut-col-exact">
                 <h3 className="donut-title-exact">
-                  {absorptionDonuts.allTime.title}
+                  Keterserapan Alumni (Semua Tahun)
                 </h3>
 
                 <div className="donut-callout-wrapper">
-                  <DonutChartSweep
-                    id="all"
-                    slices={[
-                      { name: "Bekerja", pct: 13.04, color: "#ea580c" },
-                      { name: "Kuliah", pct: 15.42, color: "#f59e0b" },
-                      { name: "Wirausaha", pct: 2.17, color: "#eab308" },
-                      { name: "Belum", pct: 69.01, color: "#f87171" },
-                    ]}
-                  />
+                  <DonutChartSweep id="all" slices={allTimeSlices} />
 
                   <div
                     className="donut-callout-tag"
@@ -1579,7 +1839,9 @@ export default function HalamanBkk() {
                     >
                       Bekerja
                     </span>
-                    <span className="donut-tag-val">13.04%</span>
+                    <span className="donut-tag-val">
+                      {allTimeSlices[0].pct}%
+                    </span>
                   </div>
                   <div
                     className="donut-callout-tag"
@@ -1591,7 +1853,9 @@ export default function HalamanBkk() {
                     >
                       Kuliah
                     </span>
-                    <span className="donut-tag-val">15.42%</span>
+                    <span className="donut-tag-val">
+                      {allTimeSlices[1].pct}%
+                    </span>
                   </div>
                   <div
                     className="donut-callout-tag"
@@ -1603,7 +1867,9 @@ export default function HalamanBkk() {
                     >
                       Wirausaha
                     </span>
-                    <span className="donut-tag-val">2.17%</span>
+                    <span className="donut-tag-val">
+                      {allTimeSlices[2].pct}%
+                    </span>
                   </div>
                   <div
                     className="donut-callout-tag"
@@ -1615,12 +1881,14 @@ export default function HalamanBkk() {
                     >
                       Belum
                     </span>
-                    <span className="donut-tag-val">69.01%</span>
+                    <span className="donut-tag-val">
+                      {allTimeSlices[3].pct}%
+                    </span>
                   </div>
                 </div>
 
                 <div className="donut-legend-exact-row">
-                  {absorptionDonuts.allTime.legend.map((leg, i) => (
+                  {allTimeSlices.map((leg, i) => (
                     <div key={i} className="legend-exact-item">
                       <span
                         className="legend-exact-dot"
@@ -1634,19 +1902,11 @@ export default function HalamanBkk() {
 
               <div className="donut-col-exact">
                 <h3 className="donut-title-exact">
-                  {absorptionDonuts.year2026.title}
+                  Rasio Keterserapan ({latestYearRow?.tahun ?? "-"})
                 </h3>
 
                 <div className="donut-callout-wrapper">
-                  <DonutChartSweep
-                    id="2026"
-                    slices={[
-                      { name: "Bekerja", pct: 42.99, color: "#ea580c" },
-                      { name: "Kuliah", pct: 30.32, color: "#f59e0b" },
-                      { name: "Wirausaha", pct: 3.01, color: "#eab308" },
-                      { name: "Belum", pct: 23.68, color: "#f87171" },
-                    ]}
-                  />
+                  <DonutChartSweep id="2026" slices={latestYearSlices} />
 
                   <div
                     className="donut-callout-tag"
@@ -1658,7 +1918,9 @@ export default function HalamanBkk() {
                     >
                       Belum
                     </span>
-                    <span className="donut-tag-val">23.68%</span>
+                    <span className="donut-tag-val">
+                      {latestYearSlices[3].pct}%
+                    </span>
                   </div>
                   <div
                     className="donut-callout-tag"
@@ -1670,7 +1932,9 @@ export default function HalamanBkk() {
                     >
                       Bekerja
                     </span>
-                    <span className="donut-tag-val">42.99%</span>
+                    <span className="donut-tag-val">
+                      {latestYearSlices[0].pct}%
+                    </span>
                   </div>
                   <div
                     className="donut-callout-tag"
@@ -1682,7 +1946,9 @@ export default function HalamanBkk() {
                     >
                       Kuliah
                     </span>
-                    <span className="donut-tag-val">30.32%</span>
+                    <span className="donut-tag-val">
+                      {latestYearSlices[1].pct}%
+                    </span>
                   </div>
                   <div
                     className="donut-callout-tag"
@@ -1694,12 +1960,14 @@ export default function HalamanBkk() {
                     >
                       Wirausaha
                     </span>
-                    <span className="donut-tag-val">3.01%</span>
+                    <span className="donut-tag-val">
+                      {latestYearSlices[2].pct}%
+                    </span>
                   </div>
                 </div>
 
                 <div className="donut-legend-exact-row">
-                  {absorptionDonuts.year2026.legend.map((leg, i) => (
+                  {latestYearSlices.map((leg, i) => (
                     <div key={i} className="legend-exact-item">
                       <span
                         className="legend-exact-dot"
@@ -1715,11 +1983,11 @@ export default function HalamanBkk() {
 
           <div className="laporan-card-white-exact">
             <h3 className="yearly-chart-title">
-              {yearlyAbsorptionChart.title}
+              Jumlah Keterserapan Alumni per Tahun
             </h3>
 
             <div className="years-pill-legend-wrap">
-              {yearlyAbsorptionChart.yearsLegend.map((y) => (
+              {yearlyChartData.years.map((y) => (
                 <div key={y.year} className="year-pill-exact">
                   <span
                     className="year-pill-rect"
@@ -1732,7 +2000,7 @@ export default function HalamanBkk() {
 
             <div className="barchart-stage-container">
               <div className="barchart-grid-lines">
-                {[1000, 800, 600, 400, 200, 0].map((v) => (
+                {yearlyChartData.axisTicks.map((v) => (
                   <div key={v} className="grid-line-row">
                     <span className="grid-line-val">{v}</span>
                     <div className="grid-line-stroke"></div>
@@ -1741,33 +2009,42 @@ export default function HalamanBkk() {
               </div>
 
               <div className="barchart-columns-wrapper">
-                {yearlyAbsorptionChart.columns.map((col, cIdx) => (
-                  <div key={col.category} className="bar-column-group">
-                    <div
-                      className="bar-pillar-stacked"
-                      style={{
-                        height: `${col.heightPct}%`,
-                        "--bar-delay": `${cIdx * 170}ms`,
-                      }}
-                    >
-                      {col.segments.map((seg, sIdx) => (
-                        <div
-                          key={sIdx}
-                          className="bar-segment-slice"
-                          style={{
-                            flex: seg.h,
-                            "--segment-delay": `${cIdx * 170 + sIdx * 65 + 180}ms`,
-                            minHeight: 0,
-                            backgroundColor: seg.color,
-                            width: "100%",
-                          }}
-                          title={`${col.category} (${seg.h})`}
-                        />
-                      ))}
+                {yearlyChartData.columns.length === 0 ? (
+                  <p className="empty-row-text">
+                    Belum ada data lulusan. Upload file excel dulu di halaman
+                    admin.
+                  </p>
+                ) : (
+                  yearlyChartData.columns.map((col, cIdx) => (
+                    <div key={col.category} className="bar-column-group">
+                      <div
+                        className="bar-pillar-stacked"
+                        style={{
+                          height: `${col.heightPct}%`,
+                          "--bar-delay": `${cIdx * 170}ms`,
+                        }}
+                      >
+                        {col.segments.map((seg, sIdx) => (
+                          <div
+                            key={sIdx}
+                            className="bar-segment-slice"
+                            style={{
+                              flex: seg.h,
+                              "--segment-delay": `${cIdx * 170 + sIdx * 65 + 180}ms`,
+                              minHeight: 0,
+                              backgroundColor: seg.color,
+                              width: "100%",
+                            }}
+                            title={`${col.category} (${seg.h})`}
+                          />
+                        ))}
+                      </div>
+                      <span className="bar-cat-label-bottom">
+                        {col.category}
+                      </span>
                     </div>
-                    <span className="bar-cat-label-bottom">{col.category}</span>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>
