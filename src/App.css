@@ -398,6 +398,12 @@
   pointer-events: none;
 }
 
+@media (max-width: 768px) {
+  .lowongan-deco-topleft {
+    display: none;
+  }
+}
+
 .lowongan-circle-1 {
   position: absolute;
   width: 54px;
@@ -1197,6 +1203,7 @@
 
 .btn-tracer-action-white:hover {
   background: #fff7ed;
+  color: #d97706;
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
 }
@@ -2773,6 +2780,104 @@
   transform: scale(1.05);
 }
 
+/* #present by */
+
+.lomba-strip {
+  max-width: var(--maxw);
+  margin: 0 auto clamp(28px, 4vw, 44px);
+  text-align: center;
+  margin-top:10px
+}
+
+.lomba-strip-label {
+  font-size: clamp(11.5px, 1.2vw, 13px);
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #ffffff;
+  margin: 0 0 16px;
+  text-transform: uppercase;
+}
+
+.lomba-strip-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(20px, 2.8vw, 36px);
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.lomba-main-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.lomba-main-logo img.logo-jhic {
+  max-height: clamp(56px, 6vw, 70px);
+  max-width: clamp(130px, 15vw, 175px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 4px 14px rgba(255, 107, 0, 0.25));
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.lomba-main-logo img.logo-jhic:hover {
+  transform: scale(1.06);
+  filter: drop-shadow(0 6px 20px rgba(255, 107, 0, 0.45));
+}
+
+.lomba-divider {
+  width: 1px;
+  height: 42px;
+  background: rgba(255, 255, 255, 0.18);
+  flex-shrink: 0;
+}
+
+.lomba-supporters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(18px, 2.5vw, 30px);
+  flex-wrap: wrap;
+}
+
+.lomba-supporters img {
+  max-height: clamp(24px, 2.4vw, 30px);
+  max-width: clamp(75px, 10vw, 130px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  opacity: 0.9;
+  transition: opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+}
+
+.lomba-supporters img[alt="Jagoan Hosting"] {
+  max-height: clamp(23px, 2.3vw, 28px);
+}
+
+.lomba-supporters img[alt="KOMDIGI"] {
+  max-height: clamp(26px, 2.7vw, 32px);
+}
+
+.lomba-supporters img[alt="Garuda Spark"] {
+  max-height: clamp(27px, 2.8vw, 33px);
+}
+
+.lomba-supporters img[alt="Ngalup.co"] {
+  max-height: clamp(17px, 1.8vw, 21px);
+  max-width: clamp(90px, 12vw, 145px);
+}
+
+.lomba-supporters img:hover {
+  opacity: 1;
+  transform: scale(1.06);
+  filter: drop-shadow(0 2px 10px rgba(255, 255, 255, 0.25));
+}
 
 
 

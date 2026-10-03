@@ -1,3 +1,12 @@
+:root {
+  --primary:#ff8c00;
+  --accent-yellow:#ffc400;
+  --text-main:#111;
+  --text-muted:#62666c;
+  --bg-page:#fff;
+  --font-heading:'Plus Jakarta Sans',Arial,sans-serif
+}
+
 /* Reset Dasar & Pengaturan Kontainer */
 .bkk-form-container {
   max-width: 800px;
@@ -106,7 +115,7 @@
 
 .form-control:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
@@ -117,7 +126,7 @@ textarea.form-control {
 
 /* Status Validasi Error */
 .form-control.is-invalid {
-  border-color: #ef4444;
+  border-color: var(--primary);
 }
 
 .form-control.is-invalid:focus {
@@ -126,7 +135,7 @@ textarea.form-control {
 
 .error-text {
   font-size: 0.75rem;
-  color: #ef4444;
+  color: var(--primary);
   margin-top: 4px;
 }
 
@@ -138,7 +147,7 @@ textarea.form-control {
 }
 
 .btn-submit {
-  background-color: #2563eb;
+  background-color: var(--primary);
   color: #ffffff;
   padding: 10px 24px;
   font-size: 0.875rem;
@@ -150,10 +159,56 @@ textarea.form-control {
 }
 
 .btn-submit:hover {
-  background-color: #1d4ed8;
+  background-color: #d87a1d;
 }
 
 .btn-submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.kembali {
+  margin-bottom: 20px;
+}
+
+.btn-kembali {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  text-decoration: none;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 999px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  transition: all 0.25s ease;
+}
+
+.btn-kembali svg {
+  transition: transform 0.25s ease;
+}
+
+.btn-kembali:hover {
+  color: #ffffff;
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(235, 166, 37, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-kembali:hover svg {
+  transform: translateX(-4px);
+}
+
+.btn-kembali:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
+}
+
+.btn-kembali:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.4);
+  outline-offset: 2px;
 }

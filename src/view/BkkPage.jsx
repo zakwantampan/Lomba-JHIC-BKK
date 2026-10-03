@@ -22,6 +22,11 @@ import {
   careerArticles,
   recapMetrics,
 } from "../data/bkkData";
+import logojhic from "../../asset/icon/1. LOGO JHIC 2.0.png";
+import logojagoanhosting from "../../asset/icon/2. Logo Jagoan Hosting_white.png";
+import logokomdigi from "../../asset/icon/3. KOMDIGI_white.png";
+import logogaruda from "../../asset/icon/4. Garuda Spark Full Color_white.png";
+import logongalup from "../../asset/icon/5. LOGO NGALUP_white.png";
 
 function PartnerLogo({
   logoUrl,
@@ -517,10 +522,10 @@ export default function HalamanBkk() {
             edu: "-", // belum ada kolom pendidikan minimal di backend
             deadline: item.batas_lamar
               ? new Date(item.batas_lamar).toLocaleDateString("id-ID", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric",
-                })
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              })
               : "-",
             description: item.deskripsi_perusahaan || item.kualifikasi,
             requirements: (item.kualifikasi || "")
@@ -530,7 +535,7 @@ export default function HalamanBkk() {
             isNew:
               item.created_at &&
               Date.now() - new Date(item.created_at).getTime() <
-                7 * 24 * 60 * 60 * 1000,
+              7 * 24 * 60 * 60 * 1000,
           })),
         );
       })
@@ -989,7 +994,7 @@ export default function HalamanBkk() {
         </div>
 
         <div className="container" style={{ position: "relative", zIndex: 2 }}>
-          <h2 className="title-orange-center">Lowongan Terbaru</h2>
+          <h2 className="title-orange-center"><span>Lowongan</span> Terbaru</h2>
 
           <div className="lowongan-layout-split">
             <aside className="card-filter-softblue">
@@ -2123,11 +2128,26 @@ export default function HalamanBkk() {
               </a>
             </div>
           </div>
-
-          <div className="footer-right-copy">
-            <span>© 2026 BKK Smakensa.</span>
+          <div class="lomba-strip reveal delay-1">
+            <p className="lomba-strip-label">Supported by :</p>
+            <div className="lomba-strip-wrap">
+              <div className="lomba-main-logo">
+                <img src={logojhic} alt="JHIC 2.0" title="Jagoan Hosting Innovation Competition 2026"
+                  className="logo-jhic" loading="lazy" /> {/* <-- Tambahkan garis miring di akhir */}
+              </div>
+              <div className="lomba-divider" aria-hidden="true"></div>
+              <div className="lomba-supporters">
+                <img src={logojagoanhosting} alt="Jagoan Hosting" title="Jagoan Hosting" loading="lazy" /> {/* <-- Tambahkan garis miring */}
+                <img src={logokomdigi} alt="KOMDIGI" title="Kementerian Komunikasi dan Digital RI" loading="lazy" /> {/* <-- Tambahkan garis miring */}
+                <img src={logogaruda} alt="Garuda Spark" title="Garuda Spark Innovation Hub" loading="lazy" /> {/* <-- Tambahkan garis miring */}
+                <img src={logongalup} alt="Ngalup.co" title="Ngalup.co" loading="lazy" /> {/* <-- Tambahkan garis miring */}
+              </div>
+            </div>
           </div>
-        </div>
+            <div className="footer-right-copy">
+              <span>© 2026 BKK Smakensa.</span>
+            </div>
+          </div>
       </footer>
 
       {selectedJobModal && (
