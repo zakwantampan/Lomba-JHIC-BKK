@@ -1,15 +1,18 @@
-import { useState } from "react";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HalamanBkk from "./view/BkkPage";
 import FormLowongan from "./view/FormLowongan";
+import Login from "./auth/Login";
+import Register from "./auth/Register";
 
 function App() {
-  const [count, setCount] = useState(0);
 
   return (
     <>
       <Router>
         <Routes>
+          <Route path="/login" element={<Login />} />
+<Route path="/register" element={<Register />} />
           <Route path="/" element={<HalamanBkk />} />
           <Route path="/lowongan" element={<FormLowongan />} />
         </Routes>
