@@ -2,16 +2,18 @@ import React, { useRef, useState, useEffect } from "react";
 import "./auth.css";
 import Recaptcha from "./Recaptcha";
 import logoSmakensa from "../assets/Logo.png";
-import loginPhoto1 from "../../img/login-foto-1.jpeg";
-import loginPhoto2 from "../../img/login-foto-2.jpeg";
-import loginPhoto3 from "../../img/login-foto-3.jpeg";
-import loginPhoto4 from "../../img/login-foto-4.jpeg";
+// Foto slideshow disajikan dari public/img agar tersedia pada hosting.
 // Pakai endpoint & guard "member" (akun alumni/publik) — terpisah dari
 // login admin. Di-alias jadi "login" biar sisa kode di file ini tidak
 // perlu diubah.
 import { memberLogin as login } from "../lib/api";
 
-const SLIDES = [loginPhoto1, loginPhoto2, loginPhoto3, loginPhoto4];
+const SLIDES = [
+  "/img/login-foto-1.jpeg",
+  "/img/login-foto-2.jpeg",
+  "/img/login-foto-3.jpeg",
+  "/img/login-foto-4.jpeg",
+];
 
 // Halaman tujuan setelah login. Bisa diatur lewat /login?next=/#alumni
 // (hanya path internal yang diterima, supaya tidak jadi open-redirect).

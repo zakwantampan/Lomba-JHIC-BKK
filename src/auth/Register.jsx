@@ -2,16 +2,18 @@ import React, { useRef, useState, useEffect } from "react";
 import "./auth.css";
 import Recaptcha from "./Recaptcha";
 import logoSmakensa from "../assets/Logo.png";
-import loginPhoto1 from "../../img/login-foto-1.jpeg";
-import loginPhoto2 from "../../img/login-foto-2.jpeg";
-import loginPhoto3 from "../../img/login-foto-3.jpeg";
-import loginPhoto4 from "../../img/login-foto-4.jpeg";
+// Foto slideshow disajikan dari public/img agar tersedia pada hosting.
 // Pakai endpoint & guard "member" (akun alumni/publik) — terpisah dari
 // register admin. Di-alias jadi "register" biar sisa kode di file ini
 // tidak perlu diubah.
 import { memberRegister as register } from "../lib/api";
 
-const SLIDES = [loginPhoto1, loginPhoto2, loginPhoto3, loginPhoto4];
+const SLIDES = [
+  "/img/login-foto-1.jpeg",
+  "/img/login-foto-2.jpeg",
+  "/img/login-foto-3.jpeg",
+  "/img/login-foto-4.jpeg",
+];
 const LOGIN_PATH = "/login"; // path halaman login
 // Backend langsung memasukkan pendaftar ke sesi (auto-login), jadi setelah
 // daftar kita arahkan ke halaman BKK, di mana tombol Login berubah jadi profil.
