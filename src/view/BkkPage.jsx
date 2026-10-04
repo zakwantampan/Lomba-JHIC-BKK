@@ -52,7 +52,7 @@ const HERO_SLIDES = [
     alt: "Simulasi layanan pelanggan siswa SMKN 1 Bondowoso",
   },
 ];
-const HERO_INTERVAL = 5500; // ms per foto
+const HERO_INTERVAL = 3000; // ms per foto
 
 function PartnerLogo({
   logoUrl,
