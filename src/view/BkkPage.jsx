@@ -32,6 +32,27 @@ import logojagoanhosting from "../../asset/icon/2. Logo Jagoan Hosting_white.png
 import logokomdigi from "../../asset/icon/3. KOMDIGI_white.png";
 import logogaruda from "../../asset/icon/4. Garuda Spark Full Color_white.png";
 import logongalup from "../../asset/icon/5. LOGO NGALUP_white.png";
+import foto1 from "../assets/login-foto-1.jpeg"
+import foto2 from "../assets/login-foto-2.jpeg"
+import foto3 from "../assets/login-foto-3.jpeg"
+import foto4 from "../assets/login-foto-4.jpeg"
+// Foto slideshow di hero. Taruh file-nya di public/img/ (hero-1.jpeg dst).
+const HERO_SLIDES = [
+  {
+    src: foto1,
+    alt: "Siswa SMKN 1 Bondowoso mengerjakan ujian kompetensi",
+  },
+  { src: foto2, alt: "Upacara bendera di SMKN 1 Bondowoso" },
+  {
+    src: foto3,
+    alt: "Sosialisasi dan pembekalan siswa di aula sekolah",
+  },
+  {
+    src: foto4,
+    alt: "Simulasi layanan pelanggan siswa SMKN 1 Bondowoso",
+  },
+];
+const HERO_INTERVAL = 5500; // ms per foto
 
 function PartnerLogo({
   logoUrl,
@@ -470,6 +491,20 @@ export default function HalamanBkk() {
   // null = belum login / belum dicek. Berisi objek user kalau sudah login.
   const [member, setMember] = useState(null);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+
+  // Slideshow hero: foto bergantian otomatis, berhenti saat kursor di atas hero.
+  const [heroIdx, setHeroIdx] = useState(0);
+  const [heroPrevIdx, setHeroPrevIdx] = useState(null);
+  const [heroPaused, setHeroPaused] = useState(false);
+
+  const goHeroSlide = (next) => {
+    if (next === heroIdx) return;
+    setHeroPrevIdx(heroIdx);
+    setHeroIdx(next);
+  };
+  // Pergantian foto dipicu selesainya animasi garis progres di indikator,
+  // jadi otomatis ikut berhenti saat hero di-hover (paused).
+  const nextHeroSlide = () => goHeroSlide((heroIdx + 1) % HERO_SLIDES.length);
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
 
@@ -1071,15 +1106,57 @@ export default function HalamanBkk() {
         )}
       </header>
 
-      <section id="beranda" className="hero-bkk">
+      <section
+        id="beranda"
+        className="hero-bkk"
+        onMouseEnter={() => setHeroPaused(true)}
+        onMouseLeave={() => setHeroPaused(false)}
+      >
         <div className="hero-bg-media">
-          <img
-            src="/img/AKL.jpeg"
-            alt="Siswa SMKN 1 Bondowoso Belajar di Kelas"
-            className="hero-bg-image"
-          />
+          {HERO_SLIDES.map((slide, i) => (
+            <img
+              key={slide.src}
+              src={slide.src}
+              alt={slide.alt}
+              loading={i === 0 ? "eager" : "lazy"}
+              className={`hero-bg-image hero-slide${
+                i === heroIdx
+                  ? " is-active"
+                  : i === heroPrevIdx
+                    ? " is-prev"
+                    : ""
+              }`}
+            />
+          ))}
         </div>
         <div className="hero-overlay-gradient"></div>
+
+        <div
+          className="hero-slide-dots"
+          role="tablist"
+          aria-label="Foto latar hero"
+        >
+          {HERO_SLIDES.map((slide, i) => (
+            <button
+              key={slide.src}
+              type="button"
+              role="tab"
+              aria-selected={i === heroIdx}
+              aria-label={`Foto ${i + 1}`}
+              className={`hero-dot${i === heroIdx ? " is-active" : ""}${
+                heroPaused ? " is-paused" : ""
+              }`}
+              onClick={() => goHeroSlide(i)}
+            >
+              <span
+                key={i === heroIdx ? `fill-${heroIdx}` : "idle"}
+                className="hero-dot-fill"
+                style={{ animationDuration: `${HERO_INTERVAL}ms` }}
+                onAnimationEnd={i === heroIdx ? nextHeroSlide : undefined}
+              />
+            </button>
+          ))}
+        </div>
 
         <div className="container hero-container-flex">
           <div className="hero-text-card">
