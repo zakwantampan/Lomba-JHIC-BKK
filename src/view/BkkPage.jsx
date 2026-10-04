@@ -32,10 +32,10 @@ import logojagoanhosting from "../../asset/icon/2. Logo Jagoan Hosting_white.png
 import logokomdigi from "../../asset/icon/3. KOMDIGI_white.png";
 import logogaruda from "../../asset/icon/4. Garuda Spark Full Color_white.png";
 import logongalup from "../../asset/icon/5. LOGO NGALUP_white.png";
-import foto1 from "../assets/login-foto-1.jpeg"
-import foto2 from "../assets/login-foto-2.jpeg"
-import foto3 from "../assets/login-foto-3.jpeg"
-import foto4 from "../assets/login-foto-4.jpeg"
+import foto1 from "../../img/login-foto-1.jpeg"
+import foto2 from "../../img/login-foto-2.jpeg"
+import foto3 from "../../img/login-foto-3.jpeg"
+import foto4 from "../../img/login-foto-4.jpeg"
 // Foto slideshow di hero. Taruh file-nya di public/img/ (hero-1.jpeg dst).
 const HERO_SLIDES = [
   {

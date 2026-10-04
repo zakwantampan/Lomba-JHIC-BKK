@@ -2,10 +2,10 @@ import React, { useRef, useState, useEffect } from "react";
 import "./auth.css";
 import Recaptcha from "./Recaptcha";
 import logoSmakensa from "../assets/Logo.png";
-import loginPhoto1 from "../assets/login-foto-1.jpeg";
-import loginPhoto2 from "../assets/login-foto-2.jpeg";
-import loginPhoto3 from "../assets/login-foto-3.jpeg";
-import loginPhoto4 from "../assets/login-foto-4.jpeg";
+import loginPhoto1 from "../../img/login-foto-1.jpeg";
+import loginPhoto2 from "../../img/login-foto-2.jpeg";
+import loginPhoto3 from "../../img/login-foto-3.jpeg";
+import loginPhoto4 from "../../img/login-foto-4.jpeg";
 // Pakai endpoint & guard "member" (akun alumni/publik) — terpisah dari
 // register admin. Di-alias jadi "register" biar sisa kode di file ini
 // tidak perlu diubah.
