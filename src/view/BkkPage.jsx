@@ -1,6 +1,11 @@
 import { useState, useMemo, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { apiFetch } from "../lib/api";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  apiFetch,
+  memberLogin,
+  memberLogout,
+  getCurrentMemberOptional,
+} from "../lib/api";
 import "../App.css";
 import "../prototype.css";
 import "../motion.css";
@@ -461,6 +466,68 @@ export default function HalamanBkk() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
 
+  const navigate = useNavigate();
+  // null = belum login / belum dicek. Berisi objek user kalau sudah login.
+  const [member, setMember] = useState(null);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
+
+  // Cek sesi member saat halaman dibuka (tanpa redirect kalau belum login).
+  useEffect(() => {
+    getCurrentMemberOptional().then(setMember);
+  }, []);
+
+  // Kisah alumni yang sudah DISETUJUI admin (GET /api/kisah-alumni/public).
+  const [approvedStories, setApprovedStories] = useState([]);
+  useEffect(() => {
+    apiFetch("/kisah-alumni/public")
+      .then((rows) =>
+        setApprovedStories(
+          (Array.isArray(rows) ? rows : []).map((k) => ({
+            id: `kisah-${k.id}`,
+            name: k.nama,
+            batch: k.angkatan,
+            role: k.jabatan,
+            quote: k.kisah,
+            photo: k.foto_url,
+          })),
+        ),
+      )
+      .catch(() => {}); // gagal -> slider tetap pakai data statis
+  }, []);
+  const testimonials = useMemo(
+    () => [...approvedStories, ...testimonialsData],
+    [approvedStories],
+  );
+
+  // Tutup dropdown profil saat klik di luar.
+  useEffect(() => {
+    if (!profileMenuOpen) return;
+    const close = (e) => {
+      if (!e.target.closest(".nav-profile-wrap")) setProfileMenuOpen(false);
+    };
+    document.addEventListener("click", close);
+    return () => document.removeEventListener("click", close);
+  }, [profileMenuOpen]);
+
+  const handleLogout = async () => {
+    await memberLogout();
+    setMember(null);
+    setProfileMenuOpen(false);
+    setMobileMenuOpen(false);
+    triggerToast("Anda berhasil keluar.");
+  };
+
+  // Tombol "Tambah Kisah": kalau belum login, minta login dulu.
+  const goAddStory = () => {
+    if (!member) {
+      setShowLoginModal(true);
+      return;
+    }
+    navigate("/kisah-alumni/tambah");
+  };
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMajor, setSelectedMajor] = useState("ALL");
   const [selectedLocation, setSelectedLocation] = useState("ALL");
@@ -522,10 +589,10 @@ export default function HalamanBkk() {
             edu: "-", // belum ada kolom pendidikan minimal di backend
             deadline: item.batas_lamar
               ? new Date(item.batas_lamar).toLocaleDateString("id-ID", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-              })
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })
               : "-",
             description: item.deskripsi_perusahaan || item.kualifikasi,
             requirements: (item.kualifikasi || "")
@@ -535,7 +602,7 @@ export default function HalamanBkk() {
             isNew:
               item.created_at &&
               Date.now() - new Date(item.created_at).getTime() <
-              7 * 24 * 60 * 60 * 1000,
+                7 * 24 * 60 * 60 * 1000,
           })),
         );
       })
@@ -795,12 +862,12 @@ export default function HalamanBkk() {
   };
 
   const nextTestimonial = () => {
-    setActiveTestimonialIdx((prev) => (prev + 1) % testimonialsData.length);
+    setActiveTestimonialIdx((prev) => (prev + 1) % testimonials.length);
   };
 
   const prevTestimonial = () => {
     setActiveTestimonialIdx((prev) =>
-      prev === 0 ? testimonialsData.length - 1 : prev - 1,
+      prev === 0 ? testimonials.length - 1 : prev - 1,
     );
   };
 
@@ -827,12 +894,29 @@ export default function HalamanBkk() {
     );
   };
 
-  const submitLoginForm = (e) => {
+  const submitLoginForm = async (e) => {
     e.preventDefault();
-    setShowLoginModal(false);
-    triggerToast(
-      `Selamat datang! Anda berhasil masuk ke portal BKK SMKN 1 Bondowoso.`,
-    );
+    setLoginError("");
+    setLoginLoading(true);
+    try {
+      // username diisi email. Kalau backend mewajibkan captcha_token,
+      // ganti `null` dengan token captcha dari widget-mu.
+      const user = await memberLogin(
+        loginForm.username,
+        loginForm.password,
+        null,
+      );
+      setMember(user);
+      setShowLoginModal(false);
+      setLoginForm({ ...loginForm, password: "" });
+      triggerToast(
+        `Selamat datang! Anda berhasil masuk ke portal BKK SMKN 1 Bondowoso.`,
+      );
+    } catch (err) {
+      setLoginError(err.message);
+    } finally {
+      setLoginLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -873,13 +957,46 @@ export default function HalamanBkk() {
           <DesktopNavigation links={navLinks} activeId={activeNav} />
 
           <div className="nav-actions">
-            <button
-              type="button"
-              className="btn-login-orange"
-              onClick={() => setShowLoginModal(true)}
-            >
-              Login
-            </button>
+            {member ? (
+              <div className="nav-profile-wrap">
+                <button
+                  type="button"
+                  className="nav-profile-btn"
+                  onClick={() => setProfileMenuOpen((v) => !v)}
+                  aria-haspopup="true"
+                  aria-expanded={profileMenuOpen}
+                >
+                  <span className="nav-profile-avatar">
+                    {(member.name || "?").trim().charAt(0).toUpperCase()}
+                  </span>
+                  <span className="nav-profile-name">{member.name}</span>
+                  <span className="nav-profile-caret">▾</span>
+                </button>
+                {profileMenuOpen && (
+                  <div className="nav-profile-menu">
+                    <div className="nav-profile-menu-head">
+                      <strong>{member.name}</strong>
+                      <span>{member.email}</span>
+                    </div>
+                    <button
+                      type="button"
+                      className="nav-profile-menu-item logout"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                type="button"
+                className="btn-login-orange"
+                onClick={() => setShowLoginModal(true)}
+              >
+                Login
+              </button>
+            )}
 
             <button
               type="button"
@@ -918,16 +1035,37 @@ export default function HalamanBkk() {
               </a>
             ))}
             <div className="mobile-drawer-login-wrap">
-              <button
-                type="button"
-                className="btn-login-orange mobile-drawer-login-btn"
-                onClick={() => {
-                  setShowLoginModal(true);
-                  setMobileMenuOpen(false);
-                }}
-              >
-                Login
-              </button>
+              {member ? (
+                <>
+                  <div className="mobile-profile-row">
+                    <span className="nav-profile-avatar">
+                      {(member.name || "?").trim().charAt(0).toUpperCase()}
+                    </span>
+                    <div className="mobile-profile-info">
+                      <strong>{member.name}</strong>
+                      <span>{member.email}</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn-login-orange mobile-drawer-login-btn"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  className="btn-login-orange mobile-drawer-login-btn"
+                  onClick={() => {
+                    setShowLoginModal(true);
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  Login
+                </button>
+              )}
             </div>
           </div>
         )}
@@ -994,7 +1132,9 @@ export default function HalamanBkk() {
         </div>
 
         <div className="container" style={{ position: "relative", zIndex: 2 }}>
-          <h2 className="title-orange-center"><span>Lowongan</span> Terbaru</h2>
+          <h2 className="title-orange-center">
+            <span>Lowongan</span> Terbaru
+          </h2>
 
           <div className="lowongan-layout-split">
             <aside className="card-filter-softblue">
@@ -1480,19 +1620,30 @@ export default function HalamanBkk() {
             <p className="alumni-subtitle-dark">
               Dari SMK, Menuju Dunia Profesional
             </p>
+            <button
+              type="button"
+              className="btn-add-story"
+              onClick={goAddStory}
+            >
+              + Tambah Kisah
+            </button>
           </div>
 
           <div className="split-success-journey">
             <div className="testimonial-card-slide14">
               {(() => {
-                const cur = testimonialsData[activeTestimonialIdx];
+                const cur =
+                  testimonials[activeTestimonialIdx] || testimonials[0];
                 return (
                   <div>
                     <div className="testi-header-row-exact">
                       <div className="testi-user-badge">
                         <div className="testi-avatar-icon">
                           <img
-                            src="https://static.everypixel.com/ep-pixabay/0329/8099/0858/84037/3298099085884037069-head.png"
+                            src={
+                              cur.photo ||
+                              "https://static.everypixel.com/ep-pixabay/0329/8099/0858/84037/3298099085884037069-head.png"
+                            }
                             alt={cur.name}
                             style={{
                               width: "100%",
@@ -1515,7 +1666,7 @@ export default function HalamanBkk() {
 
                     <div className="testi-nav-bar">
                       <div className="testi-dots-row">
-                        {testimonialsData.map((_, i) => (
+                        {testimonials.map((_, i) => (
                           <button
                             key={i}
                             type="button"
@@ -2132,22 +2283,52 @@ export default function HalamanBkk() {
             <p className="lomba-strip-label">Supported by :</p>
             <div className="lomba-strip-wrap">
               <div className="lomba-main-logo">
-                <img src={logojhic} alt="JHIC 2.0" title="Jagoan Hosting Innovation Competition 2026"
-                  className="logo-jhic" loading="lazy" /> {/* <-- Tambahkan garis miring di akhir */}
+                <img
+                  src={logojhic}
+                  alt="JHIC 2.0"
+                  title="Jagoan Hosting Innovation Competition 2026"
+                  className="logo-jhic"
+                  loading="lazy"
+                />{" "}
+                {/* <-- Tambahkan garis miring di akhir */}
               </div>
               <div className="lomba-divider" aria-hidden="true"></div>
               <div className="lomba-supporters">
-                <img src={logojagoanhosting} alt="Jagoan Hosting" title="Jagoan Hosting" loading="lazy" /> {/* <-- Tambahkan garis miring */}
-                <img src={logokomdigi} alt="KOMDIGI" title="Kementerian Komunikasi dan Digital RI" loading="lazy" /> {/* <-- Tambahkan garis miring */}
-                <img src={logogaruda} alt="Garuda Spark" title="Garuda Spark Innovation Hub" loading="lazy" /> {/* <-- Tambahkan garis miring */}
-                <img src={logongalup} alt="Ngalup.co" title="Ngalup.co" loading="lazy" /> {/* <-- Tambahkan garis miring */}
+                <img
+                  src={logojagoanhosting}
+                  alt="Jagoan Hosting"
+                  title="Jagoan Hosting"
+                  loading="lazy"
+                />{" "}
+                {/* <-- Tambahkan garis miring */}
+                <img
+                  src={logokomdigi}
+                  alt="KOMDIGI"
+                  title="Kementerian Komunikasi dan Digital RI"
+                  loading="lazy"
+                />{" "}
+                {/* <-- Tambahkan garis miring */}
+                <img
+                  src={logogaruda}
+                  alt="Garuda Spark"
+                  title="Garuda Spark Innovation Hub"
+                  loading="lazy"
+                />{" "}
+                {/* <-- Tambahkan garis miring */}
+                <img
+                  src={logongalup}
+                  alt="Ngalup.co"
+                  title="Ngalup.co"
+                  loading="lazy"
+                />{" "}
+                {/* <-- Tambahkan garis miring */}
               </div>
             </div>
           </div>
-            <div className="footer-right-copy">
-              <span>© 2026 BKK Smakensa.</span>
-            </div>
+          <div className="footer-right-copy">
+            <span>© 2026 BKK Smakensa.</span>
           </div>
+        </div>
       </footer>
 
       {selectedJobModal && (
@@ -2758,8 +2939,10 @@ export default function HalamanBkk() {
                   }
                 />
               </div>
+              {loginError && <p className="login-error-text">{loginError}</p>}
               <button
                 type="submit"
+                disabled={loginLoading}
                 className="btn-see-all-jobs-orange"
                 style={{
                   width: "100%",
@@ -2767,7 +2950,7 @@ export default function HalamanBkk() {
                   justifyContent: "center",
                 }}
               >
-                Masuk
+                {loginLoading ? "Memproses..." : "Masuk"}
               </button>
             </form>
           </div>

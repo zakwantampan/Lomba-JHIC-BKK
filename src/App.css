@@ -2879,5 +2879,56 @@
   filter: drop-shadow(0 2px 10px rgba(255, 255, 255, 0.25));
 }
 
+/* Profil member di navbar */
+.nav-profile-wrap { position: relative; }
+.nav-profile-btn {
+  display: flex; align-items: center; gap: 10px;
+  background: #fff; border: 1.5px solid #ff8200; color: #1e293b;
+  border-radius: 999px; padding: 5px 14px 5px 5px; cursor: pointer;
+  font: inherit; font-weight: 600;
+}
+.nav-profile-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: #ff8200; color: #fff; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.nav-profile-name {
+  max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.nav-profile-caret { font-size: 12px; color: #ff8200; }
+.nav-profile-menu {
+  position: absolute; right: 0; top: calc(100% + 8px); min-width: 220px;
+  background: #fff; border-radius: 14px; padding: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15); z-index: 100;
+}
+.nav-profile-menu-head {
+  display: flex; flex-direction: column; padding: 10px 12px;
+  border-bottom: 1px solid #e2e8f0; margin-bottom: 6px; font-size: 14px;
+}
+.nav-profile-menu-head span { color: #64748b; font-size: 12px; word-break: break-all; }
+.nav-profile-menu-item {
+  width: 100%; text-align: left; background: none; border: 0;
+  padding: 10px 12px; border-radius: 8px; cursor: pointer; font: inherit;
+}
+.nav-profile-menu-item.logout { color: #dc2626; font-weight: 600; }
+.nav-profile-menu-item:hover { background: #f1f5f9; }
 
+.mobile-profile-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.mobile-profile-info { display: flex; flex-direction: column; font-size: 14px; min-width: 0; }
+.mobile-profile-info span { color: #64748b; font-size: 12px; word-break: break-all; }
 
+@media (max-width: 900px) {
+  .nav-actions .nav-profile-wrap { display: none; }
+}
+
+/* Tombol tambah kisah */
+.btn-add-story {
+  margin-top: 18px; background: #ff8200; color: #fff; border: 0;
+  border-radius: 999px; padding: 12px 26px; font: inherit; font-weight: 700;
+  cursor: pointer; box-shadow: 0 6px 16px rgba(255,130,0,.3);
+  transition: transform .15s, box-shadow .15s;
+}
+.btn-add-story:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(255,130,0,.4); }
+
+.login-error-text { color: #dc2626; font-size: 13px; margin: 10px 0 0; }
